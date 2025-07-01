@@ -2,11 +2,11 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
 import type { Alignment, Product, Row } from "@/types/grid";
 
-interface GridState {
+export interface GridState {
   rows: Row[];
 }
 
-const initialState: GridState = {
+export const initialState: GridState = {
   rows: [],
 };
 
@@ -15,7 +15,7 @@ const gridSlice = createSlice({
   initialState,
   reducers: {
     addRow: (state) => {
-      state.rows.push({
+      state.rows.unshift({
         id: nanoid(),
         alignment: "left",
         products: [],
@@ -36,7 +36,11 @@ const gridSlice = createSlice({
       action: PayloadAction<{ rowId: string; product: Product }>,
     ) => {
       const row = state.rows.find((r) => r.id === action.payload.rowId);
-      if (row && row.products.length < 3) {
+      if (
+        row &&
+        row.products.length < 3 &&
+        !row.products.some((p) => p.id === action.payload.product.id)
+      ) {
         row.products.push(action.payload.product);
       }
     },
@@ -51,6 +55,30 @@ const gridSlice = createSlice({
         );
       }
     },
+    reorderProductsInRow: (
+      state,
+      action: PayloadAction<{
+        rowId: string;
+        oldIndex: number;
+        newIndex: number;
+      }>,
+    ) => {
+      const row = state.rows.find((r) => r.id === action.payload.rowId);
+      if (row) {
+        const [moved] = row.products.splice(action.payload.oldIndex, 1);
+        row.products.splice(action.payload.newIndex, 0, moved);
+      }
+    },
+    reorderRows: (
+      state,
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>,
+    ) => {
+      const [moved] = state.rows.splice(action.payload.oldIndex, 1);
+      state.rows.splice(action.payload.newIndex, 0, moved);
+    },
+    hydrate: (state, action: PayloadAction<GridState>) => {
+      return action.payload;
+    },
   },
 });
 
@@ -60,6 +88,9 @@ export const {
   setRowAlignment,
   addProductToRow,
   removeProductFromRow,
+  reorderProductsInRow,
+  reorderRows,
+  hydrate,
 } = gridSlice.actions;
 
 export default gridSlice.reducer;
