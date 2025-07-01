@@ -1,5 +1,5 @@
 import EditorGrid from "./components/EditorGrid";
-import ProductLibrary from "./components/ProductLibrary";
+import ProductList from "./components/ProductList";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
         <EditorGrid />
       </div>
       <div className="lg:col-span-1">
-        <ProductLibrary />
+        <ProductList />
       </div>
     </main>
   );
