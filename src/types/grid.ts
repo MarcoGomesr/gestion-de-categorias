@@ -3,6 +3,7 @@ export type Product = {
   name: string;
   price: number;
   imageUrl: string;
+  slotId?: string;
 };
 
 export type Alignment = "left" | "center" | "right";

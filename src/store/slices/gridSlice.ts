@@ -36,23 +36,30 @@ const gridSlice = createSlice({
       action: PayloadAction<{ rowId: string; product: Product }>,
     ) => {
       const row = state.rows.find((r) => r.id === action.payload.rowId);
-      if (
-        row &&
-        row.products.length < 3 &&
-        !row.products.some((p) => p.id === action.payload.product.id)
-      ) {
-        row.products.push(action.payload.product);
+      if (row && row.products.length < 3) {
+        const productWithSlot = { ...action.payload.product, slotId: nanoid() };
+        row.products.push(productWithSlot);
       }
     },
     removeProductFromRow: (
       state,
-      action: PayloadAction<{ rowId: string; productId: string }>,
+      action: PayloadAction<{
+        rowId: string;
+        productId: string;
+        slotId?: string;
+      }>,
     ) => {
       const row = state.rows.find((r) => r.id === action.payload.rowId);
       if (row) {
-        row.products = row.products.filter(
-          (p) => p.id !== action.payload.productId,
-        );
+        if (action.payload.slotId) {
+          row.products = row.products.filter(
+            (p) => p.slotId !== action.payload.slotId,
+          );
+        } else {
+          row.products = row.products.filter(
+            (p) => p.id !== action.payload.productId,
+          );
+        }
       }
     },
     reorderProductsInRow: (

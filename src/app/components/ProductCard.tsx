@@ -21,10 +21,11 @@ export default function ProductCard({ product, rowId }: Props) {
     transition,
     isDragging,
   } = useSortable({
-    id: product.id,
+    id: product.slotId || product.id,
     data: {
       rowId,
       product,
+      slotId: product.slotId,
     },
   });
 
@@ -39,7 +40,6 @@ export default function ProductCard({ product, rowId }: Props) {
     <div
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
       style={style}
       className={cn(
         "w-[230px] h-[377px] cursor-grab relative group",
@@ -47,12 +47,24 @@ export default function ProductCard({ product, rowId }: Props) {
         isDragging ? "opacity-0" : "",
       )}
     >
+      <div
+        {...listeners}
+        className="absolute inset-0 z-10 cursor-grab"
+        style={{ background: "transparent" }}
+        tabIndex={-1}
+      />
       <button
         type="button"
-        className="absolute top-2 right-2 z-10 bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
+        className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
         onClick={(e) => {
           e.stopPropagation();
-          dispatch(removeProductFromRow({ rowId, productId: product.id }));
+          dispatch(
+            removeProductFromRow({
+              rowId,
+              productId: product.id,
+              slotId: product.slotId,
+            }),
+          );
         }}
         aria-label="Remove product"
       >

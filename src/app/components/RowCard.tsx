@@ -1,5 +1,9 @@
 import { useDroppable } from "@dnd-kit/core";
-import { useSortable } from "@dnd-kit/sortable";
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+  useSortable,
+} from "@dnd-kit/sortable";
 import { Download, Move } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -48,6 +52,40 @@ export default function RowCard({ row }: Props) {
     setDroppableRef(node);
     setSortableRef(node);
   };
+
+  // Lógica para mapear productos a slots según la alineación
+  function getSlotIndexes(alignment: string, numProducts: number) {
+    if (numProducts === 0) return [null, null, null];
+    if (numProducts === 1) {
+      switch (alignment) {
+        case "center":
+          return [null, 0, null];
+        case "right":
+          return [null, null, 0];
+        default:
+          return [0, null, null];
+      }
+    }
+    if (numProducts === 2) {
+      switch (alignment) {
+        case "center":
+          return [null, 0, 1];
+        case "right":
+          return [null, 0, 1];
+        default:
+          return [0, 1, null];
+      }
+    }
+    // 3 productos
+    return [0, 1, 2];
+  }
+
+  const slotIndexes = getSlotIndexes(row.alignment, row.products.length);
+  const slotIds = slotIndexes.map((productIdx, idx) =>
+    productIdx !== null
+      ? row.products[productIdx]?.id
+      : `empty-${row.id}-${idx}`,
+  );
 
   return (
     <div
@@ -174,38 +212,28 @@ export default function RowCard({ row }: Props) {
         </Button>
       </div>
 
-      <div
-        className={`grid grid-cols-3 gap-4 w-full items-center justify-center p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[120px] bg-gray-50`}
-        style={{ transition: "background 0.2s, border 0.2s" }}
-      >
-        {Array.from({ length: 3 }).map((_, idx) =>
-          row.products[idx] ? (
-            <ProductCard
-              key={row.products[idx].id}
-              product={row.products[idx]}
-              rowId={row.id}
-            />
-          ) : (
-            <div
-              key={`placeholder-${row.id}-${idx}`}
-              className="w-[230px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center opacity-50"
-            />
-          ),
-        )}
-      </div>
+      <SortableContext items={slotIds} strategy={horizontalListSortingStrategy}>
+        <div
+          className={`grid grid-cols-3 gap-4 w-full items-center p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[120px] bg-gray-50`}
+          style={{ transition: "background 0.2s, border 0.2s" }}
+        >
+          {slotIndexes.map((productIdx, idx) =>
+            productIdx !== null && row.products[productIdx] ? (
+              <ProductCard
+                key={row.products[productIdx].slotId}
+                product={row.products[productIdx]}
+                rowId={row.id}
+              />
+            ) : (
+              <div
+                key={slotIds[idx]}
+                data-id={slotIds[idx]}
+                className="w-[230px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center opacity-50"
+              />
+            ),
+          )}
+        </div>
+      </SortableContext>
     </div>
   );
-}
-
-function getAlignment(alignment: string) {
-  switch (alignment) {
-    case "left":
-      return "justify-start";
-    case "center":
-      return "justify-center";
-    case "right":
-      return "justify-end";
-    default:
-      return "";
-  }
 }

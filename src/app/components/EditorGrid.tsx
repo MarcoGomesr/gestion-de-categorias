@@ -114,6 +114,7 @@ export default function EditorGrid() {
 
     const fromRowId = active.data.current.rowId;
     const product = active.data.current.product;
+    const slotId = active.data.current.slotId;
     const toRowId = over.data?.current?.rowId;
 
     // Si es el mismo row, reordenar
@@ -136,9 +137,17 @@ export default function EditorGrid() {
     const destinationRow = rows.find((r) => r.id === toRowId);
     if (destinationRow && destinationRow.products.length < 3) {
       dispatch(
-        removeProductFromRow({ rowId: fromRowId, productId: product.id }),
+        removeProductFromRow({
+          rowId: fromRowId,
+          productId: product.id,
+          slotId,
+        }),
       );
-      dispatch(addProductToRow({ rowId: toRowId, product }));
+      // Al agregar a la nueva fila, elimina el slotId para que se genere uno nuevo
+      const { slotId: _, ...productWithoutSlot } = product;
+      dispatch(
+        addProductToRow({ rowId: toRowId, product: productWithoutSlot }),
+      );
     }
   };
 
@@ -217,23 +226,36 @@ export default function EditorGrid() {
             )}
           </div>
         </div>
-        <DragOverlay>
-          {(activeRow || activeProduct) && (
+        <DragOverlay container={gridRef.current}>
+          {activeRow ? (
             <div
               style={{
-                transform: `translate(${overlayOffset.x}px, ${overlayOffset.y}px) scale(${zoom})`,
+                transform: `scale(${zoom})`,
                 transformOrigin: "top center",
                 transition: "transform 0.2s",
                 width: gridWidth,
                 minWidth: 600,
+                position: "absolute",
+                left: 0,
+                top: 0,
+                pointerEvents: "none",
               }}
             >
-              {activeRow ? <RowCard row={activeRow} /> : null}
-              {activeProduct ? (
-                <ProductCard product={activeProduct} rowId={""} />
-              ) : null}
+              <RowCard row={activeRow} />
             </div>
-          )}
+          ) : null}
+          {activeProduct ? (
+            <div
+              style={{
+                transform: `scale(${zoom})`,
+                transformOrigin: "top center",
+                transition: "transform 0.2s",
+                pointerEvents: "none",
+              }}
+            >
+              <ProductCard product={activeProduct} rowId={""} />
+            </div>
+          ) : null}
         </DragOverlay>
       </DndContext>
     </div>
