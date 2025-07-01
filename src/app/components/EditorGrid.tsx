@@ -1,6 +1,11 @@
 "use client";
 
-import { closestCenter, DndContext, type DragEndEvent } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  DragOverlay,
+} from "@dnd-kit/core";
 import {
   horizontalListSortingStrategy,
   SortableContext,
@@ -20,6 +25,7 @@ import RowCard from "./RowCard";
 export default function EditorGrid() {
   const rows = useAppSelector((state) => state.grid.rows);
   const dispatch = useAppDispatch();
+  const [activeRow, setActiveRow] = useState(null);
   const [zoom, setZoom] = useState(1);
 
   const handleZoomIn = () =>
@@ -28,7 +34,15 @@ export default function EditorGrid() {
     setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10));
   const handleZoomReset = () => setZoom(1);
 
+  const handleDragStart = (event) => {
+    const { active } = event;
+    // Si el drag es de fila
+    const row = rows.find((r) => r.id === active.id);
+    if (row) setActiveRow(row);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveRow(null);
     const { active, over } = event;
     if (!over) return;
 
@@ -110,7 +124,7 @@ export default function EditorGrid() {
               +
             </Button>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleZoomReset}
               aria-label="Reset zoom"
@@ -120,7 +134,11 @@ export default function EditorGrid() {
           </>
         )}
       </div>
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
+      >
         <div className="border-2 border-dashed border-gray-400 rounded-xl bg-gray-50 p-4 min-h-[120px] overflow-auto">
           <div
             style={{
@@ -151,6 +169,9 @@ export default function EditorGrid() {
             )}
           </div>
         </div>
+        <DragOverlay>
+          {activeRow ? <RowCard row={activeRow} /> : null}
+        </DragOverlay>
       </DndContext>
     </div>
   );
