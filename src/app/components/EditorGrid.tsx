@@ -6,7 +6,6 @@ import {
   type DragEndEvent,
   DragOverlay,
 } from "@dnd-kit/core";
-import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import {
   horizontalListSortingStrategy,
   SortableContext,
@@ -186,7 +185,6 @@ export default function EditorGrid() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         onDragStart={handleDragStart}
-        modifiers={[compensateZoomModifier(zoom), restrictToWindowEdges]}
       >
         <div className="border-2 border-dashed border-gray-400 rounded-xl bg-gray-50 p-4 min-h-[120px] overflow-auto">
           <div
