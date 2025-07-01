@@ -20,12 +20,14 @@ import {
   reorderProductsInRow,
   reorderRows,
 } from "@/store/slices/gridSlice";
+import ProductCard from "./ProductCard";
 import RowCard from "./RowCard";
 
 export default function EditorGrid() {
   const rows = useAppSelector((state) => state.grid.rows);
   const dispatch = useAppDispatch();
   const [activeRow, setActiveRow] = useState(null);
+  const [activeProduct, setActiveProduct] = useState(null);
   const [zoom, setZoom] = useState(1);
 
   const handleZoomIn = () =>
@@ -38,11 +40,21 @@ export default function EditorGrid() {
     const { active } = event;
     // Si el drag es de fila
     const row = rows.find((r) => r.id === active.id);
-    if (row) setActiveRow(row);
+    if (row) {
+      setActiveRow(row);
+      setActiveProduct(null);
+      return;
+    }
+    // Si el drag es de producto
+    if (active?.data?.current?.product) {
+      setActiveProduct(active.data.current.product);
+      setActiveRow(null);
+    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveRow(null);
+    setActiveProduct(null);
     const { active, over } = event;
     if (!over) return;
 
@@ -171,6 +183,9 @@ export default function EditorGrid() {
         </div>
         <DragOverlay>
           {activeRow ? <RowCard row={activeRow} /> : null}
+          {activeProduct ? (
+            <ProductCard product={activeProduct} rowId={""} />
+          ) : null}
         </DragOverlay>
       </DndContext>
     </div>

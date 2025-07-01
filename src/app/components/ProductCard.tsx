@@ -13,14 +13,20 @@ interface Props {
 }
 
 export default function ProductCard({ product, rowId }: Props) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: product.id,
-      data: {
-        rowId,
-        product,
-      },
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: product.id,
+    data: {
+      rowId,
+      product,
+    },
+  });
 
   const dispatch = useAppDispatch();
 
@@ -32,10 +38,13 @@ export default function ProductCard({ product, rowId }: Props) {
   return (
     <div
       ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       style={style}
       className={cn(
-        "w-[230px] cursor-grab relative group",
+        "w-[230px] h-[377px] cursor-grab relative group",
         "hover:shadow-md transition-all",
+        isDragging ? "opacity-0" : "",
       )}
     >
       <button
@@ -55,8 +64,6 @@ export default function ProductCard({ product, rowId }: Props) {
           alt={product.name}
           className="object-cover"
           fill
-          {...attributes}
-          {...listeners}
         />
       </div>
       <div className="mt-2">
