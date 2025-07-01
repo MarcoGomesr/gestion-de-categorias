@@ -175,18 +175,22 @@ export default function RowCard({ row }: Props) {
       </div>
 
       <div
-        className={`flex gap-4 w-full${row.alignment ? " " + getAlignment(row.alignment) : ""} items-center justify-center p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[120px] bg-gray-50`}
+        className={`grid grid-cols-3 gap-4 w-full items-center justify-center p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[120px] bg-gray-50`}
         style={{ transition: "background 0.2s, border 0.2s" }}
       >
-        {row.products.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center py-8 select-none text-base text-muted-foreground">
-            <Download className="w-4 h-4 mr-2" />
-            <span>Arrastra un producto aquí</span>
-          </div>
-        ) : (
-          row.products.map((product) => (
-            <ProductCard key={product.id} product={product} rowId={row.id} />
-          ))
+        {Array.from({ length: 3 }).map((_, idx) =>
+          row.products[idx] ? (
+            <ProductCard
+              key={row.products[idx].id}
+              product={row.products[idx]}
+              rowId={row.id}
+            />
+          ) : (
+            <div
+              key={`placeholder-${row.id}-${idx}`}
+              className="w-[230px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center opacity-50"
+            />
+          ),
         )}
       </div>
     </div>

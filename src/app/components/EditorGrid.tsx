@@ -6,11 +6,12 @@ import {
   type DragEndEvent,
   DragOverlay,
 } from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -20,15 +21,50 @@ import {
   reorderProductsInRow,
   reorderRows,
 } from "@/store/slices/gridSlice";
+import type { Row } from "@/types/grid";
 import ProductCard from "./ProductCard";
 import RowCard from "./RowCard";
+
+// Modifier para compensar el zoom en el DragOverlay
+function compensateZoomModifier(zoom: number) {
+  return ({
+    transform,
+  }: {
+    transform: { x: number; y: number; scaleX: number; scaleY: number };
+  }) => {
+    if (zoom === 1) return transform;
+    return {
+      ...transform,
+      x: transform.x / zoom,
+      y: transform.y / zoom,
+    };
+  };
+}
 
 export default function EditorGrid() {
   const rows = useAppSelector((state) => state.grid.rows);
   const dispatch = useAppDispatch();
-  const [activeRow, setActiveRow] = useState(null);
-  const [activeProduct, setActiveProduct] = useState(null);
+  const [activeRow, setActiveRow] = useState<Row | null>(null);
+  const [activeProduct, setActiveProduct] = useState<any>(null);
   const [zoom, setZoom] = useState(1);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [gridWidth, setGridWidth] = useState<number | undefined>(undefined);
+  const [overlayOffset, setOverlayOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
+  useEffect(() => {
+    if (gridRef.current) {
+      setGridWidth(gridRef.current.offsetWidth);
+      // Calcular el offset del grid escalado respecto al viewport
+      const rect = gridRef.current.getBoundingClientRect();
+      // El offset es la diferencia entre la posición real y la visual escalada
+      const x = rect.left - rect.left / zoom;
+      const y = rect.top - rect.top / zoom;
+      setOverlayOffset({ x, y });
+    }
+  }, [zoom, rows.length]);
 
   const handleZoomIn = () =>
     setZoom((z) => Math.min(2, Math.round((z + 0.1) * 10) / 10));
@@ -36,7 +72,7 @@ export default function EditorGrid() {
     setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10));
   const handleZoomReset = () => setZoom(1);
 
-  const handleDragStart = (event) => {
+  const handleDragStart = (event: any) => {
     const { active } = event;
     // Si el drag es de fila
     const row = rows.find((r) => r.id === active.id);
@@ -150,9 +186,11 @@ export default function EditorGrid() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         onDragStart={handleDragStart}
+        modifiers={[compensateZoomModifier(zoom), restrictToWindowEdges]}
       >
         <div className="border-2 border-dashed border-gray-400 rounded-xl bg-gray-50 p-4 min-h-[120px] overflow-auto">
           <div
+            ref={gridRef}
             style={{
               transform: `scale(${zoom})`,
               transformOrigin: "top center",
@@ -182,10 +220,22 @@ export default function EditorGrid() {
           </div>
         </div>
         <DragOverlay>
-          {activeRow ? <RowCard row={activeRow} /> : null}
-          {activeProduct ? (
-            <ProductCard product={activeProduct} rowId={""} />
-          ) : null}
+          {(activeRow || activeProduct) && (
+            <div
+              style={{
+                transform: `translate(${overlayOffset.x}px, ${overlayOffset.y}px) scale(${zoom})`,
+                transformOrigin: "top center",
+                transition: "transform 0.2s",
+                width: gridWidth,
+                minWidth: 600,
+              }}
+            >
+              {activeRow ? <RowCard row={activeRow} /> : null}
+              {activeProduct ? (
+                <ProductCard product={activeProduct} rowId={""} />
+              ) : null}
+            </div>
+          )}
         </DragOverlay>
       </DndContext>
     </div>
