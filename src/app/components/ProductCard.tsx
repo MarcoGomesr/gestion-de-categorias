@@ -43,7 +43,6 @@ export default function ProductCard({ product, rowId }: Props) {
         className="absolute top-2 right-2 z-10 bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
         onClick={(e) => {
           e.stopPropagation();
-          console.log("Removing", { rowId, productId: product.id });
           dispatch(removeProductFromRow({ rowId, productId: product.id }));
         }}
         aria-label="Remove product"
