@@ -214,7 +214,7 @@ export default function CategoryCard({ row }: Props) {
 
       <SortableContext items={slotIds} strategy={horizontalListSortingStrategy}>
         <div
-          className={`grid grid-cols-3 gap-6 w-full items-center p-6 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50`}
+          className={`grid grid-cols-3 gap-6  w-full p-6 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50`}
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
           {slotIndexes.map((productIdx, idx) =>
@@ -229,7 +229,7 @@ export default function CategoryCard({ row }: Props) {
               <div
                 key={slotIds[idx]}
                 data-id={slotIds[idx]}
-                className="w-[230px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center opacity-50"
+                className="w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50"
               />
             ),
           )}

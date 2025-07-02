@@ -48,7 +48,7 @@ export default function ProductCard({
       style={style}
       className={cn(
         isDraggable
-          ? "w-[230px] h-[377px] cursor-grab relative group hover:shadow-md transition-all p-4"
+          ? "w-[250px] cursor-grab relative group hover:shadow-md transition-all"
           : onAdd
             ? "border rounded-lg p-2 text-sm shadow-sm"
             : "text-sm p-4",
@@ -58,7 +58,7 @@ export default function ProductCard({
       {isDraggable && (
         <div
           {...sortable.listeners}
-          className="absolute inset-0 z-10 cursor-grab"
+          className="absolute inset-0 cursor-grab"
           style={{ background: "transparent" }}
           tabIndex={-1}
         />
@@ -101,7 +101,7 @@ export default function ProductCard({
           </button>
         )}
       </div>
-      <div className="mt-2 mb-2">
+      <div className="mt-2 mb-2 ml-2">
         <h4 className="text-sm font-semibold">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.price} €</p>
       </div>
