@@ -4,7 +4,7 @@ import {
   SortableContext,
   useSortable,
 } from "@dnd-kit/sortable";
-import { Download, Move } from "lucide-react";
+import { Move } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +28,7 @@ interface Props {
   row: Row;
 }
 
-export default function RowCard({ row }: Props) {
+export default function CategoryCard({ row }: Props) {
   const dispatch = useAppDispatch();
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: row.id,
@@ -162,7 +162,7 @@ export default function RowCard({ row }: Props) {
                   }}
                   disabled={row.products.length === 0}
                 >
-                  Quitar plantilla
+                  Eliminar plantilla
                 </Button>
               </>
             ) : (
@@ -186,7 +186,7 @@ export default function RowCard({ row }: Props) {
                       }}
                       disabled={row.products.length === 0}
                     >
-                      Agregar plantilla
+                      Añadir plantilla
                     </Button>
                   </span>
                 </TooltipTrigger>
@@ -214,7 +214,7 @@ export default function RowCard({ row }: Props) {
 
       <SortableContext items={slotIds} strategy={horizontalListSortingStrategy}>
         <div
-          className={`grid grid-cols-3 gap-4 w-full items-center p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[120px] bg-gray-50`}
+          className={`grid grid-cols-3 gap-6 w-full items-center p-6 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50`}
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
           {slotIndexes.map((productIdx, idx) =>
@@ -222,7 +222,8 @@ export default function RowCard({ row }: Props) {
               <ProductCard
                 key={row.products[productIdx].slotId}
                 product={row.products[productIdx]}
-                rowId={row.id}
+                categoryId={row.id}
+                isDraggable
               />
             ) : (
               <div

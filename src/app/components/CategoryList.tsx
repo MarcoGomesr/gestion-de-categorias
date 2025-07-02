@@ -10,6 +10,7 @@ import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
+import { Plus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -21,26 +22,10 @@ import {
   reorderRows,
 } from "@/store/slices/gridSlice";
 import type { Row } from "@/types/grid";
+import CategoryCard from "./CategoryCard";
 import ProductCard from "./ProductCard";
-import RowCard from "./RowCard";
 
-// Modifier para compensar el zoom en el DragOverlay
-function compensateZoomModifier(zoom: number) {
-  return ({
-    transform,
-  }: {
-    transform: { x: number; y: number; scaleX: number; scaleY: number };
-  }) => {
-    if (zoom === 1) return transform;
-    return {
-      ...transform,
-      x: transform.x / zoom,
-      y: transform.y / zoom,
-    };
-  };
-}
-
-export default function EditorGrid() {
+export default function CategoryList() {
   const rows = useAppSelector((state) => state.grid.rows);
   const dispatch = useAppDispatch();
   const [activeRow, setActiveRow] = useState<Row | null>(null);
@@ -63,7 +48,7 @@ export default function EditorGrid() {
       const y = rect.top - rect.top / zoom;
       setOverlayOffset({ x, y });
     }
-  }, [zoom, rows.length]);
+  }, [zoom, rows]);
 
   const handleZoomIn = () =>
     setZoom((z) => Math.min(2, Math.round((z + 0.1) * 10) / 10));
@@ -154,8 +139,10 @@ export default function EditorGrid() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">Editor de categorías</h2>
-        <Button onClick={() => dispatch(addRow())}>➕ Añadir fila</Button>
+        <h2 className="text-xl font-bold">Gestion de categorías</h2>
+        <Button onClick={() => dispatch(addRow())}>
+          <Plus /> Añadir categoria
+        </Button>
       </div>
       <div className="flex items-center gap-2 mb-2">
         {rows.length > 0 && (
@@ -198,20 +185,19 @@ export default function EditorGrid() {
         <div className="border-2 border-dashed border-gray-400 rounded-xl bg-gray-50 p-4 min-h-[120px] overflow-auto">
           <div
             ref={gridRef}
+            className="w-full min-w-[600px] flex flex-col gap-6"
             style={{
-              transform: `scale(${zoom})`,
+              transform: `scale(${rows.length === 0 ? 1 : zoom})`,
               transformOrigin: "top center",
               transition: "transform 0.2s",
-              width: "100%",
-              minWidth: 600,
-              display: "flex",
-              flexDirection: "column",
-              gap: "1.5rem",
             }}
           >
             {rows.length === 0 ? (
               <div className="flex items-center justify-center text-muted-foreground text-base py-8">
-                <span>No hay filas. Agrega una o arrastra aquí.</span>
+                <span>
+                  No hay categorías disponibles. Haz clic en "Añadir categoría"
+                  para empezar
+                </span>
               </div>
             ) : (
               rows.map((row) => (
@@ -220,13 +206,13 @@ export default function EditorGrid() {
                   items={row.products.map((p) => p.id)}
                   strategy={horizontalListSortingStrategy}
                 >
-                  <RowCard row={row} />
+                  <CategoryCard row={row} />
                 </SortableContext>
               ))
             )}
           </div>
         </div>
-        <DragOverlay container={gridRef.current}>
+        <DragOverlay>
           {activeRow ? (
             <div
               style={{
@@ -241,7 +227,7 @@ export default function EditorGrid() {
                 pointerEvents: "none",
               }}
             >
-              <RowCard row={activeRow} />
+              <CategoryCard row={activeRow} />
             </div>
           ) : null}
           {activeProduct ? (
@@ -253,7 +239,7 @@ export default function EditorGrid() {
                 pointerEvents: "none",
               }}
             >
-              <ProductCard product={activeProduct} rowId={""} />
+              <ProductCard product={activeProduct} categoryId={""} />
             </div>
           ) : null}
         </DragOverlay>

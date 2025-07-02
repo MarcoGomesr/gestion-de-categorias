@@ -2,86 +2,114 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/store/hooks";
 import { removeProductFromRow } from "@/store/slices/gridSlice";
 import type { Product } from "@/types/grid";
 
-interface Props {
+interface ProductCardProps {
   product: Product;
-  rowId: string;
+  onAdd?: () => void;
+  isDraggable?: boolean;
+  onRemove?: () => void;
+  categoryId?: string;
+  disabled?: boolean;
 }
 
-export default function ProductCard({ product, rowId }: Props) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: product.slotId || product.id,
-    data: {
-      rowId,
-      product,
-      slotId: product.slotId,
-    },
-  });
-
+export default function ProductCard({
+  product,
+  onAdd,
+  isDraggable = false,
+  onRemove,
+  categoryId,
+  disabled = false,
+}: ProductCardProps) {
   const dispatch = useAppDispatch();
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  // Always call useSortable, but only use its values if draggable
+  const sortable = useSortable({
+    id: product.slotId || product.id,
+    data: { categoryId, product, slotId: product.slotId },
+  });
+
+  const style =
+    isDraggable && sortable.transform
+      ? {
+          transform: CSS.Transform.toString(sortable.transform),
+          transition: sortable.transition,
+        }
+      : undefined;
 
   return (
     <div
-      ref={setNodeRef}
-      {...attributes}
+      ref={isDraggable ? sortable.setNodeRef : undefined}
+      {...(isDraggable ? sortable.attributes : {})}
       style={style}
       className={cn(
-        "w-[230px] h-[377px] cursor-grab relative group",
-        "hover:shadow-md transition-all",
-        isDragging ? "opacity-0" : "",
+        isDraggable
+          ? "w-[230px] h-[377px] cursor-grab relative group hover:shadow-md transition-all p-4"
+          : onAdd
+            ? "border rounded-lg p-2 text-sm shadow-sm"
+            : "text-sm p-4",
+        isDraggable && sortable.isDragging ? "opacity-0" : "",
       )}
     >
+      {isDraggable && (
+        <div
+          {...sortable.listeners}
+          className="absolute inset-0 z-10 cursor-grab"
+          style={{ background: "transparent" }}
+          tabIndex={-1}
+        />
+      )}
       <div
-        {...listeners}
-        className="absolute inset-0 z-10 cursor-grab"
-        style={{ background: "transparent" }}
-        tabIndex={-1}
-      />
-      <button
-        type="button"
-        className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-700"
-        onClick={(e) => {
-          e.stopPropagation();
-          dispatch(
-            removeProductFromRow({
-              rowId,
-              productId: product.id,
-              slotId: product.slotId,
-            }),
-          );
-        }}
-        aria-label="Remove product"
+        className={cn(
+          "relative",
+          isDraggable
+            ? "w-[250px] h-[377px] group/image"
+            : "w-full h-[230px] min-w-[100px]",
+        )}
       >
-        <X className="w-4 h-4 text-white" />
-      </button>
-      <div className="w-[230px] h-[377px]">
         <Image
           src={product.imageUrl}
           alt={product.name}
-          className="object-cover"
           fill
+          className="object-cover rounded"
         />
+        {isDraggable && (
+          <button
+            type="button"
+            className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover/image:opacity-100 transition-opacity hover:bg-red-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onRemove) {
+                onRemove();
+              } else if (categoryId) {
+                dispatch(
+                  removeProductFromRow({
+                    rowId: categoryId,
+                    productId: product.id,
+                    slotId: product.slotId,
+                  }),
+                );
+              }
+            }}
+            aria-label="Remove product"
+          >
+            <X className="w-4 h-4 text-white" />
+          </button>
+        )}
       </div>
-      <div className="mt-2">
+      <div className="mt-2 mb-2">
         <h4 className="text-sm font-semibold">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.price} €</p>
       </div>
+      {onAdd && !isDraggable && (
+        <Button className="mt-2 w-full" onClick={onAdd} disabled={disabled}>
+          Añadir
+        </Button>
+      )}
     </div>
   );
 }
