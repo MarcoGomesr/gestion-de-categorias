@@ -1,8 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { X } from "lucide-react";
+import { Move, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/store/hooks";
 import { removeProductFromRow } from "@/store/slices/gridSlice";
@@ -48,7 +53,7 @@ export default function ProductCard({
       style={style}
       className={cn(
         isDraggable
-          ? "w-[250px] cursor-grab relative group hover:shadow-md transition-all"
+          ? "w-[250px] relative group hover:shadow-md transition-all"
           : onAdd
             ? "border rounded-lg p-2 text-sm shadow-sm"
             : "text-sm p-4",
@@ -56,12 +61,23 @@ export default function ProductCard({
       )}
     >
       {isDraggable && (
-        <div
-          {...sortable.listeners}
-          className="absolute inset-0 cursor-grab"
-          style={{ background: "transparent" }}
-          tabIndex={-1}
-        />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              {...sortable.listeners}
+              className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
+              style={{ pointerEvents: "auto" }}
+              tabIndex={0}
+              aria-label="Arrastrar para reordenar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Move className="w-4 h-4" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent sideOffset={8}>
+            Arrastrar para reordenar
+          </TooltipContent>
+        </Tooltip>
       )}
       <div
         className={cn(
@@ -105,7 +121,7 @@ export default function ProductCard({
         <h4 className="text-sm font-semibold">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.price} €</p>
       </div>
-      {onAdd && !isDraggable && (
+      {!isDraggable && (
         <Button className="mt-2 w-full" onClick={onAdd} disabled={disabled}>
           Añadir
         </Button>

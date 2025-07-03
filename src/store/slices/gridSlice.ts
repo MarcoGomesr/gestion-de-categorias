@@ -60,6 +60,9 @@ const gridSlice = createSlice({
             (p) => p.id !== action.payload.productId,
           );
         }
+        if (row.products.length === 0) {
+          row.alignment = "";
+        }
       }
     },
     reorderProductsInRow: (
@@ -86,6 +89,55 @@ const gridSlice = createSlice({
     hydrate: (state, action: PayloadAction<GridState>) => {
       return action.payload;
     },
+    reorderProductsBySlots: (
+      state,
+      action: PayloadAction<{ rowId: string; slotIds: string[] }>,
+    ) => {
+      const row = state.rows.find((r) => r.id === action.payload.rowId);
+      if (row) {
+        const newProducts: typeof row.products = [];
+        action.payload.slotIds.forEach((slotId) => {
+          const found = row.products.find((p) => (p.slotId || p.id) === slotId);
+          if (found) newProducts.push(found);
+        });
+        row.products = newProducts;
+      }
+    },
+    moveProductBetweenRows: (
+      state,
+      action: PayloadAction<{
+        fromRowId: string;
+        toRowId: string;
+        product: Product;
+        toIndex: number;
+      }>,
+    ) => {
+      const { fromRowId, toRowId, product, toIndex } = action.payload;
+      const fromRow = state.rows.find((r) => r.id === fromRowId);
+      const toRow = state.rows.find((r) => r.id === toRowId);
+      if (!fromRow || !toRow) return;
+      // Elimina el producto de la fila original
+      fromRow.products = fromRow.products.filter(
+        (p) => (p.slotId || p.id) !== (product.slotId || product.id),
+      );
+      // Inserta el producto en la posición deseada de la nueva fila, con nuevo slotId
+      const productWithSlot = { ...product, slotId: nanoid() };
+      toRow.products.splice(toIndex, 0, productWithSlot);
+    },
+    moveProductInRow: (
+      state,
+      action: PayloadAction<{
+        rowId: string;
+        fromIndex: number;
+        toIndex: number;
+      }>,
+    ) => {
+      const { rowId, fromIndex, toIndex } = action.payload;
+      const row = state.rows.find((r) => r.id === rowId);
+      if (!row) return;
+      const [moved] = row.products.splice(fromIndex, 1);
+      row.products.splice(toIndex, 0, moved);
+    },
   },
 });
 
@@ -98,6 +150,9 @@ export const {
   reorderProductsInRow,
   reorderRows,
   hydrate,
+  reorderProductsBySlots,
+  moveProductBetweenRows,
+  moveProductInRow,
 } = gridSlice.actions;
 
 export default gridSlice.reducer;

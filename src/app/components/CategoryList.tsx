@@ -17,7 +17,10 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   addProductToRow,
   addRow,
+  moveProductBetweenRows,
+  moveProductInRow,
   removeProductFromRow,
+  reorderProductsBySlots,
   reorderProductsInRow,
   reorderRows,
 } from "@/store/slices/gridSlice";
@@ -32,23 +35,7 @@ export default function CategoryList() {
   const [activeProduct, setActiveProduct] = useState<any>(null);
   const [zoom, setZoom] = useState(1);
   const gridRef = useRef<HTMLDivElement>(null);
-  const [gridWidth, setGridWidth] = useState<number | undefined>(undefined);
-  const [overlayOffset, setOverlayOffset] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-
-  useEffect(() => {
-    if (gridRef.current) {
-      setGridWidth(gridRef.current.offsetWidth);
-      // Calcular el offset del grid escalado respecto al viewport
-      const rect = gridRef.current.getBoundingClientRect();
-      // El offset es la diferencia entre la posición real y la visual escalada
-      const x = rect.left - rect.left / zoom;
-      const y = rect.top - rect.top / zoom;
-      setOverlayOffset({ x, y });
-    }
-  }, [zoom, rows]);
+  // Removed unused gridWidth state
 
   const handleZoomIn = () =>
     setZoom((z) => Math.min(2, Math.round((z + 0.1) * 10) / 10));
@@ -60,6 +47,7 @@ export default function CategoryList() {
     const { active } = event;
     // Si el drag es de fila
     const row = rows.find((r) => r.id === active.id);
+
     if (row) {
       setActiveRow(row);
       setActiveProduct(null);
@@ -83,11 +71,11 @@ export default function CategoryList() {
     const overRowId = over.id;
     const activeRowIndex = rows.findIndex((r) => r.id === activeRowId);
     const overRowIndex = rows.findIndex((r) => r.id === overRowId);
-    if (
-      activeRowIndex !== -1 &&
-      overRowIndex !== -1 &&
-      activeRowId !== overRowId
-    ) {
+
+    const isDraggingRow =
+      activeRowIndex !== -1 && overRowIndex !== -1 && activeRowId !== overRowId;
+
+    if (isDraggingRow) {
       dispatch(
         reorderRows({ oldIndex: activeRowIndex, newIndex: overRowIndex }),
       );
@@ -101,38 +89,80 @@ export default function CategoryList() {
     const product = active.data.current.product;
     const slotId = active.data.current.slotId;
     const toRowId = over.data?.current?.rowId;
+    const overId = over.id;
 
-    // Si es el mismo row, reordenar
+    // Detectar si el drop fue sobre un slot vacío
+    const isOverEmptySlot =
+      typeof overId === "string" && overId.startsWith("empty-");
+    let emptySlotIndex = -1;
+    if (isOverEmptySlot) {
+      // El id es 'empty-<rowId>-<idx>'
+      const parts = overId.split("-");
+      emptySlotIndex = parseInt(parts[2], 10);
+    }
+
+    // Si es el mismo row, reordenar (incluyendo drop sobre slot vacío)
     if (toRowId && fromRowId === toRowId) {
       const row = rows.find((r) => r.id === fromRowId);
       if (!row) return;
-      const oldIndex = row.products.findIndex((p) => p.id === active.id);
-      const newIndex = row.products.findIndex((p) => p.id === over.id);
-      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+      const oldIndex = row.products.findIndex(
+        (p) => (p.slotId || p.id) === active.id,
+      );
+      let newIndex = row.products.findIndex(
+        (p) => (p.slotId || p.id) === over.id,
+      );
+      if (isOverEmptySlot && emptySlotIndex !== -1) {
+        newIndex = row.products.length; // Siempre al final (puedes ajustar si quieres en el slot exacto)
+      }
+
+      // Solo reordenar si la posición cambia y hay más de un producto
+      if (oldIndex !== -1 && oldIndex !== newIndex && row.products.length > 1) {
+        // Construir el nuevo orden de slotIds
+        const productsCopy = [...row.products];
+        const [moved] = productsCopy.splice(oldIndex, 1);
+        productsCopy.splice(newIndex, 0, moved);
+        const newSlotIds = productsCopy.map((p) => p.slotId || p.id);
         dispatch(
-          reorderProductsInRow({ rowId: fromRowId, oldIndex, newIndex }),
+          reorderProductsBySlots({
+            rowId: fromRowId,
+            slotIds: newSlotIds,
+          }),
         );
       }
       return;
     }
 
-    if (!toRowId || fromRowId === toRowId) return;
-
-    // Asegúrate de que la fila destino tenga menos de 3
-    const destinationRow = rows.find((r) => r.id === toRowId);
-    if (destinationRow && destinationRow.products.length < 3) {
-      dispatch(
-        removeProductFromRow({
-          rowId: fromRowId,
-          productId: product.id,
-          slotId,
-        }),
-      );
-      // Al agregar a la nueva fila, elimina el slotId para que se genere uno nuevo
-      const { slotId: _, ...productWithoutSlot } = product;
-      dispatch(
-        addProductToRow({ rowId: toRowId, product: productWithoutSlot }),
-      );
+    // Mover entre filas (incluyendo drop sobre slot vacío)
+    if (
+      toRowId &&
+      fromRowId !== toRowId &&
+      (over.data?.current?.product || isOverEmptySlot)
+    ) {
+      const destinationRow = rows.find((r) => r.id === toRowId);
+      if (destinationRow && destinationRow.products.length < 3) {
+        // Calcula el índice de inserción
+        let toIndex = destinationRow.products.length;
+        if (isOverEmptySlot && emptySlotIndex !== -1) {
+          toIndex = emptySlotIndex;
+        } else if (over.data?.current?.product) {
+          toIndex = destinationRow.products.findIndex(
+            (p) => (p.slotId || p.id) === over.id,
+          );
+          if (toIndex === -1) toIndex = destinationRow.products.length;
+        }
+        // Asegura que toIndex siempre sea un número válido
+        if (typeof toIndex !== "number" || isNaN(toIndex)) {
+          toIndex = destinationRow.products.length;
+        }
+        dispatch(
+          moveProductBetweenRows({
+            fromRowId,
+            toRowId,
+            product,
+            toIndex,
+          }),
+        );
+      }
     }
   };
 
@@ -203,7 +233,7 @@ export default function CategoryList() {
               rows.map((row) => (
                 <SortableContext
                   key={row.id}
-                  items={row.products.map((p) => p.id)}
+                  items={row.products.map((p) => p.slotId || p.id)}
                   strategy={horizontalListSortingStrategy}
                 >
                   <CategoryCard row={row} />
@@ -219,13 +249,14 @@ export default function CategoryList() {
                 transform: `scale(${zoom})`,
                 transformOrigin: "top center",
                 transition: "transform 0.2s",
-                width: gridWidth,
                 minWidth: 600,
+                width: "100%",
                 position: "absolute",
                 left: 0,
                 top: 0,
                 pointerEvents: "none",
               }}
+              className="w-full min-w-[600px] flex flex-col gap-6"
             >
               <CategoryCard row={activeRow} />
             </div>
@@ -239,7 +270,11 @@ export default function CategoryList() {
                 pointerEvents: "none",
               }}
             >
-              <ProductCard product={activeProduct} categoryId={""} />
+              <ProductCard
+                product={activeProduct}
+                categoryId={""}
+                isDraggable
+              />
             </div>
           ) : null}
         </DragOverlay>

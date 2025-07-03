@@ -55,9 +55,11 @@ export default function CategoryCard({ row }: Props) {
 
   // Lógica para mapear productos a slots según la alineación
   function getSlotIndexes(alignment: string, numProducts: number) {
+    // Si no hay alineación, usar 'left' por defecto
+    const align = alignment || "left";
     if (numProducts === 0) return [null, null, null];
     if (numProducts === 1) {
-      switch (alignment) {
+      switch (align) {
         case "center":
           return [null, 0, null];
         case "right":
@@ -67,7 +69,7 @@ export default function CategoryCard({ row }: Props) {
       }
     }
     if (numProducts === 2) {
-      switch (alignment) {
+      switch (align) {
         case "center":
           return [null, 0, 1];
         case "right":
@@ -80,12 +82,26 @@ export default function CategoryCard({ row }: Props) {
     return [0, 1, 2];
   }
 
+  // Prepara los ids de los productos para SortableContext
+  const productIds = row.products
+    .map((p) => p.slotId)
+    .filter((id): id is string => Boolean(id));
   const slotIndexes = getSlotIndexes(row.alignment, row.products.length);
-  const slotIds = slotIndexes.map((productIdx, idx) =>
-    productIdx !== null
-      ? row.products[productIdx]?.id
-      : `empty-${row.id}-${idx}`,
-  );
+
+  // Llama a useDroppable SIEMPRE para los 3 slots
+  const emptyDroppable0 = useDroppable({
+    id: `empty-${row.id}-0`,
+    data: { rowId: row.id, emptySlotIndex: 0 },
+  });
+  const emptyDroppable1 = useDroppable({
+    id: `empty-${row.id}-1`,
+    data: { rowId: row.id, emptySlotIndex: 1 },
+  });
+  const emptyDroppable2 = useDroppable({
+    id: `empty-${row.id}-2`,
+    data: { rowId: row.id, emptySlotIndex: 2 },
+  });
+  const emptyDroppables = [emptyDroppable0, emptyDroppable1, emptyDroppable2];
 
   return (
     <div
@@ -212,27 +228,41 @@ export default function CategoryCard({ row }: Props) {
         </Button>
       </div>
 
-      <SortableContext items={slotIds} strategy={horizontalListSortingStrategy}>
+      <SortableContext
+        items={productIds}
+        strategy={horizontalListSortingStrategy}
+      >
         <div
           className={`grid grid-cols-3 gap-6  w-full p-6 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50`}
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
-          {slotIndexes.map((productIdx, idx) =>
-            productIdx !== null && row.products[productIdx] ? (
-              <ProductCard
-                key={row.products[productIdx].slotId}
-                product={row.products[productIdx]}
-                categoryId={row.id}
-                isDraggable
-              />
-            ) : (
-              <div
-                key={slotIds[idx]}
-                data-id={slotIds[idx]}
-                className="w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50"
-              />
-            ),
-          )}
+          {slotIndexes.map((productIdx, idx) => {
+            if (productIdx !== null && row.products[productIdx]) {
+              return (
+                <ProductCard
+                  key={
+                    row.products[productIdx].slotId ||
+                    row.products[productIdx].id
+                  }
+                  product={row.products[productIdx]}
+                  categoryId={row.id}
+                  isDraggable
+                />
+              );
+            } else {
+              // Usa el droppable preparado solo para los vacíos
+              const emptyId = `empty-${row.id}-${idx}`;
+              const droppable = emptyDroppables[idx];
+              return (
+                <div
+                  ref={droppable.setNodeRef}
+                  key={emptyId}
+                  data-id={emptyId}
+                  className={`w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50 transition ${droppable.isOver ? "ring-2 ring-blue-400" : ""}`}
+                />
+              );
+            }
+          })}
         </div>
       </SortableContext>
     </div>
