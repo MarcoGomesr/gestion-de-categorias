@@ -233,7 +233,13 @@ export default function CategoryCard({ row }: Props) {
         strategy={horizontalListSortingStrategy}
       >
         <div
-          className={`grid grid-cols-3 gap-6  w-full p-6 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50`}
+          className={`flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 ${
+            row.alignment === "center"
+              ? "justify-center"
+              : row.alignment === "right"
+                ? "justify-end"
+                : "justify-start"
+          }`}
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
           {slotIndexes.map((productIdx, idx) => {
