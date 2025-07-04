@@ -20,7 +20,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useAppDispatch } from "@/store/hooks";
-import { removeRow, setRowAlignment } from "@/store/slices/gridSlice";
+import {
+  removeProductFromRow,
+  removeRow,
+  setRowAlignment,
+} from "@/store/slices/gridSlice";
 import type { Row } from "@/types/grid";
 import ProductCard from "./ProductCard";
 
@@ -71,7 +75,7 @@ export default function CategoryCard({ row }: Props) {
     if (numProducts === 2) {
       switch (align) {
         case "center":
-          return [null, 0, 1];
+          return [0, 1];
         case "right":
           return [null, 0, 1];
         default:
@@ -251,8 +255,17 @@ export default function CategoryCard({ row }: Props) {
                     row.products[productIdx].id
                   }
                   product={row.products[productIdx]}
-                  categoryId={row.id}
                   isDraggable
+                  rowId={row.id}
+                  onRemove={() =>
+                    dispatch(
+                      removeProductFromRow({
+                        rowId: row.id,
+                        productId: row.products[productIdx].id,
+                        slotId: row.products[productIdx].slotId,
+                      }),
+                    )
+                  }
                 />
               );
             } else {
