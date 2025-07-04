@@ -79,7 +79,6 @@ export default function CategoryList() {
 
     const fromRowId = active.data.current.rowId;
     const product = active.data.current.product;
-    const slotId = active.data.current.slotId;
     const toRowId = over.data?.current?.rowId;
     const overId = over.id;
 
