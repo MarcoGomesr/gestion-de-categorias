@@ -5,45 +5,37 @@ import {
   DndContext,
   type DragEndEvent,
   DragOverlay,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
-  addProductToRow,
   addRow,
   moveProductBetweenRows,
-  moveProductInRow,
-  removeProductFromRow,
   reorderProductsBySlots,
-  reorderProductsInRow,
   reorderRows,
 } from "@/store/slices/gridSlice";
-import type { Row } from "@/types/grid";
+import type { Product, Row } from "@/types/grid";
 import CategoryCard from "./CategoryCard";
 import ProductCard from "./ProductCard";
+import ZoomControls from "./ZoomControls";
 
 export default function CategoryList() {
   const rows = useAppSelector((state) => state.grid.rows);
   const dispatch = useAppDispatch();
   const [activeRow, setActiveRow] = useState<Row | null>(null);
-  const [activeProduct, setActiveProduct] = useState<any>(null);
+  const [activeProduct, setActiveProduct] = useState<Product | null>(null);
   const [zoom, setZoom] = useState(1);
   const gridRef = useRef<HTMLDivElement>(null);
   // Removed unused gridWidth state
 
-  const handleZoomIn = () =>
-    setZoom((z) => Math.min(2, Math.round((z + 0.1) * 10) / 10));
-  const handleZoomOut = () =>
-    setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10));
-  const handleZoomReset = () => setZoom(1);
-
-  const handleDragStart = (event: any) => {
+  const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     // Si el drag es de fila
     const row = rows.find((r) => r.id === active.id);
@@ -175,37 +167,7 @@ export default function CategoryList() {
         </Button>
       </div>
       <div className="flex items-center gap-2 mb-2">
-        {rows.length > 0 && (
-          <>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleZoomOut}
-              aria-label="Zoom out"
-            >
-              -
-            </Button>
-            <span className="w-12 text-center select-none">
-              {Math.round(zoom * 100)}%
-            </span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleZoomIn}
-              aria-label="Zoom in"
-            >
-              +
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleZoomReset}
-              aria-label="Reset zoom"
-            >
-              Reset
-            </Button>
-          </>
-        )}
+        {rows.length > 0 && <ZoomControls zoom={zoom} setZoom={setZoom} />}
       </div>
       <DndContext
         collisionDetection={closestCenter}
@@ -245,36 +207,18 @@ export default function CategoryList() {
         <DragOverlay>
           {activeRow ? (
             <div
-              style={{
-                transform: `scale(${zoom})`,
-                transformOrigin: "top center",
-                transition: "transform 0.2s",
-                minWidth: 600,
-                width: "100%",
-                position: "absolute",
-                left: 0,
-                top: 0,
-                pointerEvents: "none",
-              }}
-              className="w-full min-w-[600px] flex flex-col gap-6"
+              className="w-full min-w-[600px] flex flex-col gap-6 absolute left-0 top-0 pointer-events-none origin-top transition-transform duration-200"
+              style={{ transform: `scale(${zoom})` }}
             >
               <CategoryCard row={activeRow} />
             </div>
           ) : null}
           {activeProduct ? (
             <div
-              style={{
-                transform: `scale(${zoom})`,
-                transformOrigin: "top center",
-                transition: "transform 0.2s",
-                pointerEvents: "none",
-              }}
+              className="pointer-events-none origin-top transition-transform duration-200"
+              style={{ transform: `scale(${zoom})` }}
             >
-              <ProductCard
-                product={activeProduct}
-                categoryId={""}
-                isDraggable
-              />
+              <ProductCard product={activeProduct} isDraggable />
             </div>
           ) : null}
         </DragOverlay>
