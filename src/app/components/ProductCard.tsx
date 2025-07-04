@@ -9,8 +9,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { useAppDispatch } from "@/store/hooks";
-import { removeProductFromRow } from "@/store/slices/gridSlice";
 import type { Product } from "@/types/grid";
 
 interface ProductCardProps {
@@ -18,8 +16,8 @@ interface ProductCardProps {
   onAdd?: () => void;
   isDraggable?: boolean;
   onRemove?: () => void;
-  categoryId?: string;
   disabled?: boolean;
+  rowId?: string;
 }
 
 export default function ProductCard({
@@ -27,15 +25,13 @@ export default function ProductCard({
   onAdd,
   isDraggable = false,
   onRemove,
-  categoryId,
   disabled = false,
+  rowId,
 }: ProductCardProps) {
-  const dispatch = useAppDispatch();
-
   // Always call useSortable, but only use its values if draggable
   const sortable = useSortable({
     id: product.slotId || product.id,
-    data: { categoryId, product, slotId: product.slotId },
+    data: { product, slotId: product.slotId, rowId },
   });
 
   const style =
@@ -101,14 +97,6 @@ export default function ProductCard({
               e.stopPropagation();
               if (onRemove) {
                 onRemove();
-              } else if (categoryId) {
-                dispatch(
-                  removeProductFromRow({
-                    rowId: categoryId,
-                    productId: product.id,
-                    slotId: product.slotId,
-                  }),
-                );
               }
             }}
             aria-label="Remove product"
