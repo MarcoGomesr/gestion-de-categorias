@@ -2,6 +2,7 @@
 
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { useState } from "react";
+import ProductCard from "@/shared/components/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import {
   addProductToRow,
@@ -12,7 +13,6 @@ import {
 import type { Product, Row } from "@/shared/types/grid";
 import CategoryCard from "./components/CategoryCard";
 import CategoryList from "./components/CategoryList";
-import ProductCard from "./components/ProductCard";
 import ProductList from "./components/ProductList";
 
 export default function Home() {

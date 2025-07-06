@@ -1,9 +1,9 @@
 "use client";
 import type React from "react";
+import ProductCard from "@/shared/components/ProductCard";
 import { useAppDispatch } from "@/shared/store/hooks";
 import { removeProductFromRow } from "@/shared/store/slices/gridSlice";
 import type { Row } from "@/shared/types/grid";
-import ProductCard from "../ProductCard";
 import EmptySlot from "./EmptySlot";
 
 type ProductSlotsProps = {

@@ -1,12 +1,11 @@
 "use client";
 
 import { toast } from "sonner";
-
+import ProductCard from "@/shared/components/ProductCard";
 import { fakeProducts } from "@/shared/data/FakeProducts";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import { addProductToRow } from "@/shared/store/slices/gridSlice";
 import type { Product } from "@/shared/types/grid";
-import ProductCard from "./ProductCard";
 
 export default function ProductList() {
   const dispatch = useAppDispatch();
