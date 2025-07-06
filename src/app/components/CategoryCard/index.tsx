@@ -84,7 +84,7 @@ export default function CategoryCard({ row }: Props) {
 
   // Only highlight if dragging a category (row)
   const isDraggingCategory =
-    active && active.data?.current && !active.data.current.product;
+    active?.data?.current && !active.data.current.product;
   const showRing = isOver && isDraggingCategory;
 
   return (
