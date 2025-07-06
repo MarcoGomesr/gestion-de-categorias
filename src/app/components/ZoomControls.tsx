@@ -1,18 +1,22 @@
 import { Minus, Plus } from "lucide-react";
-import type React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import type { RootState } from "@/store";
+import { resetZoom, zoomIn, zoomOut } from "@/store/slices/gridSlice";
 
-type ZoomControlsProps = {
-  zoom: number;
-  setZoom: React.Dispatch<React.SetStateAction<number>>;
-};
+const ZoomControls: React.FC = () => {
+  const zoom = useSelector((state: RootState) => state.grid.zoom);
+  const rows = useSelector((state: RootState) => state.grid.rows);
+  const dispatch = useDispatch();
 
-const ZoomControls: React.FC<ZoomControlsProps> = ({ zoom, setZoom }) => {
-  const handleZoomIn = () =>
-    setZoom((z) => Math.min(2, Math.round((z + 0.1) * 10) / 10));
-  const handleZoomOut = () =>
-    setZoom((z) => Math.max(0.5, Math.round((z - 0.1) * 10) / 10));
-  const handleZoomReset = () => setZoom(1);
+  const handleZoomIn = () => dispatch(zoomIn());
+  const handleZoomOut = () => dispatch(zoomOut());
+  const handleZoomReset = () => dispatch(resetZoom());
+
+  // No mostrar controles si no hay filas
+  if (rows.length === 0) {
+    return null;
+  }
 
   return (
     <>

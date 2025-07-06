@@ -6,7 +6,7 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addRow } from "@/store/slices/gridSlice";
@@ -16,8 +16,8 @@ import ZoomControls from "./ZoomControls";
 
 export default function CategoryList() {
   const rows = useAppSelector((state) => state.grid.rows);
+  const zoom = useAppSelector((state) => state.grid.zoom);
   const dispatch = useAppDispatch();
-  const [zoom, setZoom] = useState(1);
   const gridRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -29,7 +29,7 @@ export default function CategoryList() {
         </Button>
       </div>
       <div className="flex items-center gap-2 mb-2">
-        {rows.length > 0 && <ZoomControls zoom={zoom} setZoom={setZoom} />}
+        <ZoomControls />
       </div>
       <div className="border-2 border-dashed border-gray-400 rounded-xl bg-gray-50 p-4 min-h-[120px] overflow-auto">
         <div

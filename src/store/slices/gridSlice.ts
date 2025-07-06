@@ -4,16 +4,30 @@ import type { Alignment, Product, Row } from "@/types/grid";
 
 export interface GridState {
   rows: Row[];
+  zoom: number;
 }
 
 export const initialState: GridState = {
   rows: [],
+  zoom: 1,
 };
 
 const gridSlice = createSlice({
   name: "grid",
   initialState,
   reducers: {
+    setZoom: (state, action: PayloadAction<number>) => {
+      state.zoom = action.payload;
+    },
+    zoomIn: (state) => {
+      state.zoom = Math.min(2, Math.round((state.zoom + 0.1) * 10) / 10);
+    },
+    zoomOut: (state) => {
+      state.zoom = Math.max(0.5, Math.round((state.zoom - 0.1) * 10) / 10);
+    },
+    resetZoom: (state) => {
+      state.zoom = 1;
+    },
     addRow: (state) => {
       state.rows.unshift({
         id: nanoid(),
@@ -61,7 +75,7 @@ const gridSlice = createSlice({
           );
         }
         if (row.products.length === 0) {
-          row.alignment = "";
+          row.alignment = "left";
         }
       }
     },
@@ -142,6 +156,10 @@ const gridSlice = createSlice({
 });
 
 export const {
+  setZoom,
+  zoomIn,
+  zoomOut,
+  resetZoom,
   addRow,
   removeRow,
   setRowAlignment,
