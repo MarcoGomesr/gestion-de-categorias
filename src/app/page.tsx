@@ -1,7 +1,7 @@
 "use client";
 
-import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
-import { useRef, useState } from "react";
+import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   addProductToRow,
@@ -21,7 +21,6 @@ export default function Home() {
   const [activeRow, setActiveRow] = useState<Row | null>(null);
   const [activeProduct, setActiveProduct] = useState<Product | null>(null);
   const zoom = useAppSelector((state) => state.grid.zoom);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   const handleDragStart = (event: any) => {
     const { active } = event;
@@ -159,7 +158,7 @@ export default function Home() {
   return (
     <main className="w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
       <DndContext
-        collisionDetection={closestCenter}
+        collisionDetection={pointerWithin}
         onDragEnd={handleDragEnd}
         onDragStart={handleDragStart}
       >
