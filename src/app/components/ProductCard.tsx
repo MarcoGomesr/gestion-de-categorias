@@ -48,8 +48,8 @@ export default function ProductCard({
         dragProps.isDragging ? "opacity-0" : "",
       )}
     >
-      <Button
-        variant="ghost"
+      <button
+        type="button"
         {...dragProps.dragHandleProps}
         className="absolute top-2 left-2 z-20 bg-gray-200 rounded-full p-1 w-7 h-7 flex items-center justify-center cursor-grab"
         style={{ pointerEvents: "auto" }}
@@ -60,7 +60,7 @@ export default function ProductCard({
         }}
       >
         <Move className="w-4 h-4" />
-      </Button>
+      </button>
       <div
         className={cn(
           "relative",
@@ -73,11 +73,12 @@ export default function ProductCard({
           src={product.imageUrl}
           alt={product.name}
           fill
+          sizes="(max-width: 768px) 100vw, 250px"
           className="object-cover rounded"
         />
         {!isProductList && (
-          <Button
-            variant="ghost"
+          <button
+            type="button"
             className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover/image:opacity-100 transition-opacity hover:bg-red-700"
             onClick={(e) => {
               e.stopPropagation();
@@ -88,7 +89,7 @@ export default function ProductCard({
             aria-label="Remove product"
           >
             <X className="w-4 h-4 text-white" />
-          </Button>
+          </button>
         )}
       </div>
       <div className="mt-2 mb-2 ml-2">
