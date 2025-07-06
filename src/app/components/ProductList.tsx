@@ -12,6 +12,8 @@ export default function ProductList() {
   const dispatch = useAppDispatch();
   const rows = useAppSelector((state) => state.grid.rows);
 
+  const categoryProductIds = rows[0]?.products.map((p) => p.id).join("-") || "";
+
   const handleAddProduct = (product: Product) => {
     if (rows.length === 0) {
       toast.error("No hay categorías disponibles.");
@@ -28,7 +30,7 @@ export default function ProductList() {
       <div className="grid grid-cols-2 gap-4">
         {fakeProducts.map((product) => (
           <ProductCard
-            key={product.id}
+            key={product.id + "-" + categoryProductIds}
             product={product}
             isProductList
             onAdd={() => handleAddProduct(product)}

@@ -41,10 +41,6 @@ export default function ProductCard({
       }
     : undefined;
 
-  if (isProductList) {
-    console.log("[ProductCard] dragHandleProps:", dragProps.dragHandleProps);
-  }
-
   return (
     <div
       ref={dragProps.setNodeRef}
