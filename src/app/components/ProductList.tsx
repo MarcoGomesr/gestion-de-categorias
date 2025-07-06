@@ -16,7 +16,7 @@ export default function ProductList() {
       <div className="grid grid-cols-2 gap-4">
         {fakeProducts.map((product) => (
           <ProductCard
-            key={product.id + "-" + categoryProductIds}
+            key={`${product.id}-${categoryProductIds}`}
             product={product}
             isProductList
             rowId={rows[0]?.id}
