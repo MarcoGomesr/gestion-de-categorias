@@ -3,11 +3,6 @@ import { Move, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types/grid";
@@ -47,8 +42,6 @@ export default function ProductCard({
       }
     : undefined;
 
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-
   return (
     <div
       ref={dragProps.setNodeRef}
@@ -60,37 +53,27 @@ export default function ProductCard({
         dragProps.isDragging ? "opacity-0" : "",
       )}
     >
-      {/* Drag handle siempre visible */}
-      <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
-        <TooltipTrigger
-          asChild
-          onMouseEnter={() => setTooltipOpen(true)}
-          onMouseLeave={() => setTooltipOpen(false)}
-          onMouseDown={() => setTooltipOpen(false)}
-          onTouchStart={() => setTooltipOpen(false)}
-        >
-          <button
-            {...dragProps.dragHandleProps}
-            className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
-            style={{ pointerEvents: "auto" }}
-            tabIndex={0}
-            aria-label="Arrastrar para reordenar"
-            onClick={(e) => {
-              e.stopPropagation();
-              // Log de depuración del botón de mover
-              console.log("[ProductCard] Click en mover", {
-                isProductList,
-                dragHandleProps: dragProps.dragHandleProps,
-                product,
-                rowId,
-              });
-            }}
-          >
-            <Move className="w-4 h-4" />
-          </button>
-        </TooltipTrigger>
-        <TooltipContent sideOffset={8}>Arrastrar para reordenar</TooltipContent>
-      </Tooltip>
+      {/* Drag handle siempre visible, sin tooltip */}
+      <Button
+        variant="ghost"
+        {...dragProps.dragHandleProps}
+        className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
+        style={{ pointerEvents: "auto" }}
+        tabIndex={0}
+        aria-label="Arrastrar para reordenar"
+        onClick={(e) => {
+          e.stopPropagation();
+          // Log de depuración del botón de mover
+          console.log("[ProductCard] Click en mover", {
+            isProductList,
+            dragHandleProps: dragProps.dragHandleProps,
+            product,
+            rowId,
+          });
+        }}
+      >
+        <Move className="w-4 h-4" />
+      </Button>
       <div
         className={cn(
           "relative",
@@ -107,8 +90,8 @@ export default function ProductCard({
         />
         {/* Solo mostrar botón eliminar si NO es ProductList */}
         {!isProductList && (
-          <button
-            type="button"
+          <Button
+            variant="ghost"
             className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover/image:opacity-100 transition-opacity hover:bg-red-700"
             onClick={(e) => {
               e.stopPropagation();
@@ -119,7 +102,7 @@ export default function ProductCard({
             aria-label="Remove product"
           >
             <X className="w-4 h-4 text-white" />
-          </button>
+          </Button>
         )}
       </div>
       <div className="mt-2 mb-2 ml-2">
