@@ -57,7 +57,7 @@ export default function ProductCard({
       <Button
         variant="ghost"
         {...dragProps.dragHandleProps}
-        className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
+        className="absolute top-2 left-2 z-20 bg-gray-200 rounded-full p-1 w-7 h-7 flex items-center justify-center cursor-grab"
         style={{ pointerEvents: "auto" }}
         tabIndex={0}
         aria-label="Arrastrar para reordenar"
