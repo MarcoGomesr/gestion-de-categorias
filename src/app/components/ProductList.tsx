@@ -1,26 +1,14 @@
 "use client";
 
-import { toast } from "sonner";
 import ProductCard from "@/shared/components/ProductCard";
 import { fakeProducts } from "@/shared/data/FakeProducts";
-import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
-import { addProductToRow } from "@/shared/store/slices/gridSlice";
+import { useAppSelector } from "@/shared/store/hooks";
 import type { Product } from "@/shared/types/grid";
 
 export default function ProductList() {
-  const dispatch = useAppDispatch();
   const rows = useAppSelector((state) => state.grid.rows);
   const categoryProductIds =
     rows[0]?.products.map((p: Product) => p.id).join("-") || "";
-
-  const handleAddProduct = (product: Product) => {
-    if (rows.length === 0) {
-      toast.error("No hay categorías disponibles.");
-      return;
-    }
-    const firstRowId = rows[0].id;
-    dispatch(addProductToRow({ rowId: firstRowId, product, source: "click" }));
-  };
 
   return (
     <div className="border rounded-xl p-4 shadow-sm bg-white max-w-md">
@@ -32,7 +20,6 @@ export default function ProductList() {
             product={product}
             isProductList
             rowId={rows[0]?.id}
-            onAdd={() => handleAddProduct(product)}
             disabled={rows[0]?.products.length >= 3}
           />
         ))}

@@ -1,7 +1,11 @@
 "use client";
+import { toast } from "sonner";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 import { useAppDispatch } from "@/shared/store/hooks";
-import { removeProductFromRow } from "@/shared/store/slices/gridSlice";
+import {
+  addProductToRow,
+  removeProductFromRow,
+} from "@/shared/store/slices/gridSlice";
 import type { Product } from "@/shared/types/grid";
 import ProductCard from "./ProductCard";
 
@@ -9,7 +13,6 @@ type ProductCardContainerProps = {
   product: Product;
   rowId?: string;
   slotId?: string;
-  onAdd?: () => void;
   disabled?: boolean;
   isProductList?: boolean;
 };
@@ -18,7 +21,6 @@ function ProductCardContainer({
   product,
   rowId,
   slotId,
-  onAdd,
   disabled,
   isProductList = false,
 }: ProductCardContainerProps) {
@@ -27,6 +29,13 @@ function ProductCardContainer({
     if (rowId) {
       dispatch(removeProductFromRow({ rowId, productId: product.id, slotId }));
     }
+  };
+  const handleAdd = () => {
+    if (!rowId) {
+      toast.error("No hay categorías disponibles.");
+      return;
+    }
+    dispatch(addProductToRow({ rowId, product, source: "click" }));
   };
   const dragContext = isProductList ? "ProductList" : "CategoryCard";
   const dragData = isProductList
@@ -42,7 +51,7 @@ function ProductCardContainer({
   return (
     <ProductCard
       product={product}
-      onAdd={onAdd}
+      onAdd={isProductList ? handleAdd : undefined}
       onRemove={handleRemove}
       disabled={disabled}
       isProductList={isProductList}
