@@ -20,7 +20,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const [activeRow, setActiveRow] = useState<Row | null>(null);
   const [activeProduct, setActiveProduct] = useState<Product | null>(null);
-  const [zoom, setZoom] = useState(1);
+  const zoom = useAppSelector((state) => state.grid.zoom);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const handleDragStart = (event: any) => {
@@ -148,6 +148,7 @@ export default function Home() {
           addProductToRow({
             rowId: toRowId,
             product,
+            source: "dnd",
           }),
         );
       }
