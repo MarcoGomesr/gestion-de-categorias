@@ -1,8 +1,6 @@
 "use client";
 import type React from "react";
 import ProductCard from "@/shared/components/ProductCard";
-import { useAppDispatch } from "@/shared/store/hooks";
-import { removeProductFromRow } from "@/shared/store/slices/gridSlice";
 import type { Row } from "@/shared/types/grid";
 import EmptySlot from "./EmptySlot";
 
@@ -20,10 +18,6 @@ const ProductSlots: React.FC<ProductSlotsProps> = ({
   slotIndexes,
   emptyDroppables,
 }) => {
-  const dispatch = useAppDispatch();
-  const handleRemoveProduct = (productId: string, slotId?: string) => {
-    dispatch(removeProductFromRow({ rowId: row.id, productId, slotId }));
-  };
   return (
     <>
       {slotIndexes.map((productIdx, idx) => {
@@ -34,13 +28,8 @@ const ProductSlots: React.FC<ProductSlotsProps> = ({
                 row.products[productIdx].slotId || row.products[productIdx].id
               }
               product={row.products[productIdx]}
+              slotId={row.products[productIdx].slotId}
               rowId={row.id}
-              onRemove={() =>
-                handleRemoveProduct(
-                  row.products[productIdx].id,
-                  row.products[productIdx].slotId,
-                )
-              }
             />
           );
         } else {

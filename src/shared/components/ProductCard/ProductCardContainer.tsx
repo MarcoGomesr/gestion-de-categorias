@@ -1,23 +1,37 @@
 "use client";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
+import { useAppDispatch } from "@/shared/store/hooks";
+import { removeProductFromRow } from "@/shared/store/slices/gridSlice";
 import type { Product } from "@/shared/types/grid";
 import ProductCard from "./ProductCard";
 
 type ProductCardContainerProps = {
   product: Product;
-  onAdd?: () => void;
-  onRemove?: () => void;
-  disabled?: boolean;
   rowId?: string;
+  slotId?: string;
+  onAdd?: () => void;
+  disabled?: boolean;
   isProductList?: boolean;
 };
 
-function ProductCardContainer(props: ProductCardContainerProps) {
-  const { product, rowId, isProductList = false } = props;
+function ProductCardContainer({
+  product,
+  rowId,
+  slotId,
+  onAdd,
+  disabled,
+  isProductList = false,
+}: ProductCardContainerProps) {
+  const dispatch = useAppDispatch();
+  const handleRemove = () => {
+    if (rowId) {
+      dispatch(removeProductFromRow({ rowId, productId: product.id, slotId }));
+    }
+  };
   const dragContext = isProductList ? "ProductList" : "CategoryCard";
   const dragData = isProductList
     ? { product, rowId }
-    : { product, rowId, slotId: product.slotId };
+    : { product, rowId, slotId };
 
   const dragProps = useDragAndDrop({
     id: product.id,
@@ -25,7 +39,16 @@ function ProductCardContainer(props: ProductCardContainerProps) {
     data: dragData,
   });
 
-  return <ProductCard {...props} dragProps={dragProps} />;
+  return (
+    <ProductCard
+      product={product}
+      onAdd={onAdd}
+      onRemove={handleRemove}
+      disabled={disabled}
+      isProductList={isProductList}
+      dragProps={dragProps}
+    />
+  );
 }
 
 export default ProductCardContainer;

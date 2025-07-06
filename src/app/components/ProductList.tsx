@@ -10,8 +10,8 @@ import type { Product } from "@/shared/types/grid";
 export default function ProductList() {
   const dispatch = useAppDispatch();
   const rows = useAppSelector((state) => state.grid.rows);
-
-  const categoryProductIds = rows[0]?.products.map((p) => p.id).join("-") || "";
+  const categoryProductIds =
+    rows[0]?.products.map((p: Product) => p.id).join("-") || "";
 
   const handleAddProduct = (product: Product) => {
     if (rows.length === 0) {
@@ -25,15 +25,15 @@ export default function ProductList() {
   return (
     <div className="border rounded-xl p-4 shadow-sm bg-white max-w-md">
       <h3 className="font-semibold mb-2">Lista de productos</h3>
-
       <div className="grid grid-cols-2 gap-4">
         {fakeProducts.map((product) => (
           <ProductCard
             key={product.id + "-" + categoryProductIds}
             product={product}
             isProductList
+            rowId={rows[0]?.id}
             onAdd={() => handleAddProduct(product)}
-            disabled={rows.length > 0 && rows[0].products.length >= 3}
+            disabled={rows[0]?.products.length >= 3}
           />
         ))}
       </div>
