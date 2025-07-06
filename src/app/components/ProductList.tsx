@@ -30,6 +30,7 @@ export default function ProductList() {
           <ProductCard
             key={product.id}
             product={product}
+            isProductList
             onAdd={() => handleAddProduct(product)}
             disabled={rows.length > 0 && rows[0].products.length >= 3}
           />

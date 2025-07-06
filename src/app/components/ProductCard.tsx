@@ -1,86 +1,102 @@
-import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Move, X } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types/grid";
 
 interface ProductCardProps {
   product: Product;
   onAdd?: () => void;
-  isDraggable?: boolean;
   onRemove?: () => void;
   disabled?: boolean;
   rowId?: string;
+  isProductList?: boolean;
 }
 
 export default function ProductCard({
   product,
   onAdd,
-  isDraggable = false,
   onRemove,
   disabled = false,
   rowId,
+  isProductList = false,
 }: ProductCardProps) {
-  // Always call useSortable, but only use its values if draggable
-  const sortable = useSortable({
-    id: product.slotId || product.id,
-    data: { product, slotId: product.slotId, rowId },
+  // Log de depuración de props
+  console.log("[ProductCard] Render", { product, rowId, isProductList });
+
+  // Usar el hook unificado para drag & drop
+  const dragContext = isProductList ? "ProductList" : "CategoryCard";
+  const dragProps = useDragAndDrop({
+    id: product.id,
+    context: dragContext,
+    data: { product, rowId, slotId: product.slotId },
   });
 
-  const style =
-    isDraggable && sortable.transform
-      ? {
-          transform: CSS.Transform.toString(sortable.transform),
-          transition: sortable.transition,
-        }
-      : undefined;
+  const style = dragProps.transform
+    ? {
+        transform: CSS.Transform.toString(dragProps.transform),
+        transition: dragProps.transition,
+      }
+    : undefined;
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   return (
     <div
-      ref={isDraggable ? sortable.setNodeRef : undefined}
-      {...(isDraggable ? sortable.attributes : {})}
+      ref={dragProps.setNodeRef}
+      {...dragProps.attributes}
       style={style}
       className={cn(
-        isDraggable
-          ? "w-[250px] relative group hover:shadow-md transition-all"
-          : onAdd
-            ? "border rounded-lg p-2 text-sm shadow-sm"
-            : "text-sm p-4",
-        isDraggable && sortable.isDragging ? "opacity-0" : "",
+        "relative group hover:shadow-md transition-all bg-white",
+        isProductList ? "" : "w-[250px]",
+        dragProps.isDragging ? "opacity-0" : "",
       )}
     >
-      {isDraggable && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              {...sortable.listeners}
-              className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
-              style={{ pointerEvents: "auto" }}
-              tabIndex={0}
-              aria-label="Arrastrar para reordenar"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Move className="w-4 h-4" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent sideOffset={8}>
-            Arrastrar para reordenar
-          </TooltipContent>
-        </Tooltip>
-      )}
+      {/* Drag handle siempre visible */}
+      <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
+        <TooltipTrigger
+          asChild
+          onMouseEnter={() => setTooltipOpen(true)}
+          onMouseLeave={() => setTooltipOpen(false)}
+          onMouseDown={() => setTooltipOpen(false)}
+          onTouchStart={() => setTooltipOpen(false)}
+        >
+          <button
+            {...dragProps.dragHandleProps}
+            className="absolute top-2 left-2 z-20 p-1 bg-gray-200 rounded-full cursor-grab"
+            style={{ pointerEvents: "auto" }}
+            tabIndex={0}
+            aria-label="Arrastrar para reordenar"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Log de depuración del botón de mover
+              console.log("[ProductCard] Click en mover", {
+                isProductList,
+                dragHandleProps: dragProps.dragHandleProps,
+                product,
+                rowId,
+              });
+            }}
+          >
+            <Move className="w-4 h-4" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent sideOffset={8}>Arrastrar para reordenar</TooltipContent>
+      </Tooltip>
       <div
         className={cn(
           "relative",
-          isDraggable
-            ? "w-[250px] h-[377px] group/image"
-            : "w-full h-[230px] min-w-[100px]",
+          isProductList
+            ? "w-full h-[230px] min-w-[100px] group/image"
+            : "w-[250px] h-[377px] group/image",
         )}
       >
         <Image
@@ -89,7 +105,8 @@ export default function ProductCard({
           fill
           className="object-cover rounded"
         />
-        {isDraggable && (
+        {/* Solo mostrar botón eliminar si NO es ProductList */}
+        {!isProductList && (
           <button
             type="button"
             className="absolute top-2 right-2 z-20 pointer-events-auto bg-red-500 rounded-full p-1 w-7 h-7 flex items-center justify-center shadow opacity-0 group-hover/image:opacity-100 transition-opacity hover:bg-red-700"
@@ -109,7 +126,8 @@ export default function ProductCard({
         <h4 className="text-sm font-semibold">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.price} €</p>
       </div>
-      {!isDraggable && (
+      {/* Solo mostrar botón añadir si es ProductList */}
+      {isProductList && (
         <Button className="mt-2 w-full" onClick={onAdd} disabled={disabled}>
           Añadir
         </Button>

@@ -2,7 +2,6 @@ import { useDroppable } from "@dnd-kit/core";
 import {
   horizontalListSortingStrategy,
   SortableContext,
-  useSortable,
 } from "@dnd-kit/sortable";
 import { Move } from "lucide-react";
 import { useState } from "react";
@@ -19,6 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import { useAppDispatch } from "@/store/hooks";
 import {
   removeProductFromRow,
@@ -38,23 +38,20 @@ export default function CategoryCard({ row }: Props) {
     id: row.id,
     data: { rowId: row.id },
   });
-  const {
-    setNodeRef: setSortableRef,
-    attributes,
-    listeners,
-    transition,
-    transform,
-    isDragging,
-  } = useSortable({
+
+  // Usar el hook unificado para el drag de categorías
+  const dragProps = useDragAndDrop({
     id: row.id,
+    context: "CategoryRow",
     data: { rowId: row.id },
   });
+
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
 
   // Combina refs para sortable y droppable
   const setCombinedRef = (node: HTMLElement | null) => {
     setDroppableRef(node);
-    setSortableRef(node);
+    dragProps.setNodeRef?.(node);
   };
 
   // Lógica para mapear productos a slots según la alineación
@@ -111,11 +108,11 @@ export default function CategoryCard({ row }: Props) {
     <div
       ref={setCombinedRef}
       style={{
-        transition,
-        transform: transform
-          ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+        transition: dragProps.transition,
+        transform: dragProps.transform
+          ? `translate3d(${dragProps.transform.x}px, ${dragProps.transform.y}px, 0)`
           : undefined,
-        opacity: isDragging ? 0.5 : 1,
+        opacity: dragProps.isDragging ? 0.5 : 1,
       }}
       className={`border rounded-xl p-4 shadow-sm bg-white`}
     >
@@ -123,8 +120,8 @@ export default function CategoryCard({ row }: Props) {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            {...attributes}
-            {...listeners}
+            {...dragProps.attributes}
+            {...dragProps.listeners}
             className="cursor-grab p-1 mr-2 select-none bg-gray-100 rounded hover:bg-gray-200"
             style={{ display: "inline-flex" }}
             title="Mover fila"
@@ -255,7 +252,6 @@ export default function CategoryCard({ row }: Props) {
                     row.products[productIdx].id
                   }
                   product={row.products[productIdx]}
-                  isDraggable
                   rowId={row.id}
                   onRemove={() =>
                     dispatch(
