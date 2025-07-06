@@ -24,10 +24,14 @@ export default function ProductCard({
   isProductList = false,
 }: ProductCardProps) {
   const dragContext = isProductList ? "ProductList" : "CategoryCard";
+  const dragData = isProductList
+    ? { product, rowId }
+    : { product, rowId, slotId: product.slotId };
+
   const dragProps = useDragAndDrop({
     id: product.id,
     context: dragContext,
-    data: { product, rowId, slotId: product.slotId },
+    data: dragData,
   });
 
   const style = dragProps.transform
@@ -36,6 +40,10 @@ export default function ProductCard({
         transition: dragProps.transition,
       }
     : undefined;
+
+  if (isProductList) {
+    console.log("[ProductCard] dragHandleProps:", dragProps.dragHandleProps);
+  }
 
   return (
     <div
@@ -74,6 +82,7 @@ export default function ProductCard({
           alt={product.name}
           fill
           sizes="(max-width: 768px) 100vw, 250px"
+          priority
           className="object-cover rounded"
         />
         {!isProductList && (

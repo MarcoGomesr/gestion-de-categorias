@@ -18,7 +18,7 @@ export default function ProductList() {
       return;
     }
     const firstRowId = rows[0].id;
-    dispatch(addProductToRow({ rowId: firstRowId, product }));
+    dispatch(addProductToRow({ rowId: firstRowId, product, source: "click" }));
   };
 
   return (

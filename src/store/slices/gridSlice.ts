@@ -47,11 +47,16 @@ const gridSlice = createSlice({
     },
     addProductToRow: (
       state,
-      action: PayloadAction<{ rowId: string; product: Product }>,
+      action: PayloadAction<{
+        rowId: string;
+        product: Product;
+        source?: "click" | "dnd";
+      }>,
     ) => {
+      const { slotId, ...cleanProduct } = action.payload.product;
+      const productWithSlot = { ...cleanProduct, slotId: nanoid() };
       const row = state.rows.find((r) => r.id === action.payload.rowId);
       if (row && row.products.length < 3) {
-        const productWithSlot = { ...action.payload.product, slotId: nanoid() };
         row.products.push(productWithSlot);
       }
     },
