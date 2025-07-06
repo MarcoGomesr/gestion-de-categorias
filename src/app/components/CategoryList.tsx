@@ -14,6 +14,33 @@ import type { Row } from "@/types/grid";
 import CategoryCard from "./CategoryCard";
 import ZoomControls from "./ZoomControls";
 
+function EmptyCategoryMessage() {
+  return (
+    <div className="flex items-center justify-center text-muted-foreground text-base py-8">
+      <span>
+        No hay categorías disponibles. Haz clic en "Añadir categoría" para
+        empezar
+      </span>
+    </div>
+  );
+}
+
+function CategoryRows({ rows }: { rows: Row[] }) {
+  return (
+    <>
+      {rows.map((row) => (
+        <SortableContext
+          key={row.id}
+          items={row.products.map((p) => p.slotId || p.id)}
+          strategy={horizontalListSortingStrategy}
+        >
+          <CategoryCard row={row} />
+        </SortableContext>
+      ))}
+    </>
+  );
+}
+
 export default function CategoryList() {
   const rows = useAppSelector((state) => state.grid.rows);
   const zoom = useAppSelector((state) => state.grid.zoom);
@@ -42,22 +69,9 @@ export default function CategoryList() {
           }}
         >
           {rows.length === 0 ? (
-            <div className="flex items-center justify-center text-muted-foreground text-base py-8">
-              <span>
-                No hay categorías disponibles. Haz clic en "Añadir categoría"
-                para empezar
-              </span>
-            </div>
+            <EmptyCategoryMessage />
           ) : (
-            rows.map((row) => (
-              <SortableContext
-                key={row.id}
-                items={row.products.map((p) => p.slotId || p.id)}
-                strategy={horizontalListSortingStrategy}
-              >
-                <CategoryCard row={row} />
-              </SortableContext>
-            ))
+            <CategoryRows rows={rows} />
           )}
         </div>
       </div>
