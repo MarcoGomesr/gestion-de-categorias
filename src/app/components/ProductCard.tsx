@@ -1,7 +1,6 @@
 import { CSS } from "@dnd-kit/utilities";
 import { Move, X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import { cn } from "@/lib/utils";
@@ -24,10 +23,6 @@ export default function ProductCard({
   rowId,
   isProductList = false,
 }: ProductCardProps) {
-  // Log de depuración de props
-  console.log("[ProductCard] Render", { product, rowId, isProductList });
-
-  // Usar el hook unificado para drag & drop
   const dragContext = isProductList ? "ProductList" : "CategoryCard";
   const dragProps = useDragAndDrop({
     id: product.id,
@@ -53,7 +48,6 @@ export default function ProductCard({
         dragProps.isDragging ? "opacity-0" : "",
       )}
     >
-      {/* Drag handle siempre visible, sin tooltip */}
       <Button
         variant="ghost"
         {...dragProps.dragHandleProps}
@@ -63,13 +57,6 @@ export default function ProductCard({
         aria-label="Arrastrar para reordenar"
         onClick={(e) => {
           e.stopPropagation();
-          // Log de depuración del botón de mover
-          console.log("[ProductCard] Click en mover", {
-            isProductList,
-            dragHandleProps: dragProps.dragHandleProps,
-            product,
-            rowId,
-          });
         }}
       >
         <Move className="w-4 h-4" />
@@ -88,7 +75,6 @@ export default function ProductCard({
           fill
           className="object-cover rounded"
         />
-        {/* Solo mostrar botón eliminar si NO es ProductList */}
         {!isProductList && (
           <Button
             variant="ghost"
@@ -109,7 +95,7 @@ export default function ProductCard({
         <h4 className="text-sm font-semibold">{product.name}</h4>
         <p className="text-xs text-muted-foreground">{product.price} €</p>
       </div>
-      {/* Solo mostrar botón añadir si es ProductList */}
+      {/* Only show add button if it is ProductList */}
       {isProductList && (
         <Button className="mt-2 w-full" onClick={onAdd} disabled={disabled}>
           Añadir
