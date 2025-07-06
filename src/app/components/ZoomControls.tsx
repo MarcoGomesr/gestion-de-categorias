@@ -14,9 +14,7 @@ const ZoomControls: React.FC = () => {
   const handleZoomReset = () => dispatch(resetZoom());
 
   // No mostrar controles si no hay filas
-  if (rows.length === 0) {
-    return null;
-  }
+  if (rows.length === 0) return null;
 
   return (
     <>
