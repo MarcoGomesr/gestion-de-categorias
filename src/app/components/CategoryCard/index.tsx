@@ -1,5 +1,5 @@
 "use client";
-import { useDroppable } from "@dnd-kit/core";
+import { useDndContext, useDroppable } from "@dnd-kit/core";
 import {
   horizontalListSortingStrategy,
   SortableContext,
@@ -18,10 +18,11 @@ interface Props {
 
 export default function CategoryCard({ row }: Props) {
   const dispatch = useAppDispatch();
-  const { setNodeRef: setDroppableRef } = useDroppable({
+  const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: row.id,
     data: { rowId: row.id },
   });
+  const { active } = useDndContext();
 
   const dragProps = useDragAndDrop({
     id: row.id,
@@ -95,6 +96,11 @@ export default function CategoryCard({ row }: Props) {
     return "justify-start";
   }
 
+  // Only highlight if dragging a category (row)
+  const isDraggingCategory =
+    active && active.data?.current && !active.data.current.product;
+  const showRing = isOver && isDraggingCategory;
+
   return (
     <div
       ref={setCombinedRef}
@@ -105,14 +111,13 @@ export default function CategoryCard({ row }: Props) {
           : undefined,
         opacity: dragProps.isDragging ? 0.5 : 1,
       }}
-      className={`border rounded-xl p-4 shadow-sm bg-white`}
+      className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
     >
       <Header
         rowId={row.id}
         alignment={row.alignment}
         showTemplateSelector={showTemplateSelector}
         setShowTemplateSelector={setShowTemplateSelector}
-        onMove={() => {}}
         onRemove={(e) => {
           e.stopPropagation();
           dispatch(removeRow(row.id));

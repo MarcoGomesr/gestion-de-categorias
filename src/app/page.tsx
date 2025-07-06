@@ -43,14 +43,27 @@ export default function Home() {
     const { active, over } = event;
     if (!over) return;
 
+    // Drop validation: prevent dropping a category onto a product/slot and vice versa
+    const isDraggingRow = rows.some((r) => r.id === active.id);
+    const isOverRow = rows.some((r) => r.id === over.id);
+
+    // If dragging a category, only allow drop on another category
+    if (isDraggingRow && !isOverRow) {
+      return;
+    }
+    // If dragging a product, do not allow drop on a category
+    if (!isDraggingRow && isOverRow) {
+      return;
+    }
+
     // Drag de filas
     const activeRowId = active.id;
     const overRowId = over.id;
     const activeRowIndex = rows.findIndex((r) => r.id === activeRowId);
     const overRowIndex = rows.findIndex((r) => r.id === overRowId);
-    const isDraggingRow =
+    const isRowReorder =
       activeRowIndex !== -1 && overRowIndex !== -1 && activeRowId !== overRowId;
-    if (isDraggingRow) {
+    if (isRowReorder) {
       dispatch(
         reorderRows({ oldIndex: activeRowIndex, newIndex: overRowIndex }),
       );

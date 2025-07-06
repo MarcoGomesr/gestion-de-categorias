@@ -8,7 +8,6 @@ interface HeaderProps {
   alignment: string;
   showTemplateSelector: boolean;
   setShowTemplateSelector: (show: boolean) => void;
-  onMove: (e: React.MouseEvent) => void;
   onRemove: (e: React.MouseEvent) => void;
 }
 
@@ -17,12 +16,11 @@ const Header: React.FC<HeaderProps> = ({
   alignment,
   showTemplateSelector,
   setShowTemplateSelector,
-  onMove,
   onRemove,
 }) => (
   <div className="flex justify-between items-center mb-3">
     <div className="flex items-center gap-2">
-      <MoveButton onMove={onMove} />
+      <MoveButton id={rowId} context="CategoryRow" data={{ rowId }} />
       <TemplateSelector
         rowId={rowId}
         alignment={alignment}

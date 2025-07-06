@@ -1,3 +1,4 @@
+import { useDndContext } from "@dnd-kit/core";
 import type React from "react";
 
 interface EmptySlotProps {
@@ -10,13 +11,19 @@ const EmptySlot: React.FC<EmptySlotProps> = ({
   setNodeRef,
   emptyId,
   isOver,
-}) => (
-  <div
-    ref={setNodeRef}
-    key={emptyId}
-    data-id={emptyId}
-    className={`w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50 transition ${isOver ? "ring-2 ring-blue-400" : ""}`}
-  />
-);
+}) => {
+  const { active } = useDndContext();
+  // Only highlight if dragging a product (not a category/row)
+  const isDraggingProduct = active?.data?.current?.product;
+  const showRing = isOver && isDraggingProduct;
+  return (
+    <div
+      ref={setNodeRef}
+      key={emptyId}
+      data-id={emptyId}
+      className={`w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50 transition ${showRing ? "ring-2 ring-blue-400" : ""}`}
+    />
+  );
+};
 
 export default EmptySlot;
