@@ -24,7 +24,6 @@ export default function Home() {
 
   const handleDragStart = (event: any) => {
     const { active } = event;
-    // Si el drag es de fila
     const row = rows.find((r) => r.id === active.id);
     if (row) {
       setActiveRow(row);

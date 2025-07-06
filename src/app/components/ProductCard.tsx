@@ -1,19 +1,21 @@
+"use client";
 import { CSS } from "@dnd-kit/utilities";
 import { Move, X } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useDragAndDrop } from "@/hooks/useDragAndDrop";
 import { cn } from "@/lib/utils";
 import type { Product } from "@/types/grid";
 
-interface ProductCardProps {
+type ProductCardProps = {
   product: Product;
   onAdd?: () => void;
   onRemove?: () => void;
   disabled?: boolean;
   rowId?: string;
   isProductList?: boolean;
-}
+};
 
 export default function ProductCard({
   product,
