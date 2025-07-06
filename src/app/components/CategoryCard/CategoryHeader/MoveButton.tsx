@@ -1,5 +1,5 @@
 import { Move } from "lucide-react";
-import { useDragAndDrop } from "@/hooks/useDragAndDrop";
+import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 
 interface MoveButtonProps {
   id: string;

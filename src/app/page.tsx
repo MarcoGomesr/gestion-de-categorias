@@ -2,14 +2,14 @@
 
 import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import {
   addProductToRow,
   moveProductBetweenRows,
   reorderProductsBySlots,
   reorderRows,
-} from "@/store/slices/gridSlice";
-import type { Product, Row } from "@/types/grid";
+} from "@/shared/store/slices/gridSlice";
+import type { Product, Row } from "@/shared/types/grid";
 import CategoryCard from "./components/CategoryCard";
 import CategoryList from "./components/CategoryList";
 import ProductCard from "./components/ProductCard";
@@ -90,10 +90,10 @@ export default function Home() {
       const row = rows.find((r) => r.id === fromRowId);
       if (!row) return;
       const oldIndex = row.products.findIndex(
-        (p) => (p.slotId || p.id) === active.id,
+        (p: Product) => (p.slotId || p.id) === active.id,
       );
       let newIndex = row.products.findIndex(
-        (p) => (p.slotId || p.id) === over.id,
+        (p: Product) => (p.slotId || p.id) === over.id,
       );
       if (isOverEmptySlot && emptySlotIndex !== -1) {
         newIndex = row.products.length;
@@ -102,7 +102,7 @@ export default function Home() {
         const productsCopy = [...row.products];
         const [moved] = productsCopy.splice(oldIndex, 1);
         productsCopy.splice(newIndex, 0, moved);
-        const newSlotIds = productsCopy.map((p) => p.slotId || p.id);
+        const newSlotIds = productsCopy.map((p: Product) => p.slotId || p.id);
         dispatch(
           reorderProductsBySlots({
             rowId: fromRowId,
@@ -125,7 +125,7 @@ export default function Home() {
           toIndex = emptySlotIndex;
         } else if (over.data?.current?.product) {
           toIndex = destinationRow.products.findIndex(
-            (p) => (p.slotId || p.id) === over.id,
+            (p: Product) => (p.slotId || p.id) === over.id,
           );
           if (toIndex === -1) toIndex = destinationRow.products.length;
         }
@@ -151,7 +151,7 @@ export default function Home() {
           toIndex = emptySlotIndex;
         } else if (over.data?.current?.product) {
           toIndex = destinationRow.products.findIndex(
-            (p) => (p.slotId || p.id) === over.id,
+            (p: Product) => (p.slotId || p.id) === over.id,
           );
           if (toIndex === -1) toIndex = destinationRow.products.length;
         }

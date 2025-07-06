@@ -1,5 +1,5 @@
 import type React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import MoveButton from "./MoveButton";
 import TemplateSelector from "./TemplateSelector";
 
@@ -11,7 +11,7 @@ interface HeaderProps {
   onRemove: (e: React.MouseEvent) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({
+const CategoryHeader: React.FC<HeaderProps> = ({
   rowId,
   alignment,
   showTemplateSelector,
@@ -34,4 +34,4 @@ const Header: React.FC<HeaderProps> = ({
   </div>
 );
 
-export default Header;
+export default CategoryHeader;

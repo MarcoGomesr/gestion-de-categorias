@@ -1,16 +1,15 @@
 "use client";
 
-import { useDroppable } from "@dnd-kit/core";
 import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
 import { useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addRow } from "@/store/slices/gridSlice";
-import type { Row } from "@/types/grid";
+import { Button } from "@/shared/components/ui/button";
+import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
+import { addRow } from "@/shared/store/slices/gridSlice";
+import type { Row } from "@/shared/types/grid";
 import CategoryCard from "./CategoryCard";
 import ZoomControls from "./ZoomControls";
 

@@ -2,11 +2,10 @@
 import { CSS } from "@dnd-kit/utilities";
 import { Move, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useDragAndDrop } from "@/hooks/useDragAndDrop";
-import { cn } from "@/lib/utils";
-import type { Product } from "@/types/grid";
+import { Button } from "@/shared/components/ui/button";
+import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
+import { cn } from "@/shared/lib/utils";
+import type { Product } from "@/shared/types/grid";
 
 type ProductCardProps = {
   product: Product;

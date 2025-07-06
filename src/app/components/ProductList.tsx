@@ -2,10 +2,10 @@
 
 import { toast } from "sonner";
 
-import { fakeProducts } from "@/data/FakeProducts";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addProductToRow } from "@/store/slices/gridSlice";
-import type { Product } from "@/types/grid";
+import { fakeProducts } from "@/shared/data/FakeProducts";
+import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
+import { addProductToRow } from "@/shared/store/slices/gridSlice";
+import type { Product } from "@/shared/types/grid";
 import ProductCard from "./ProductCard";
 
 export default function ProductList() {

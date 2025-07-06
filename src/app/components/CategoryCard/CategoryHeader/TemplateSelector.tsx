@@ -1,16 +1,16 @@
 "use client";
 import type React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
-import { useAppDispatch } from "@/store/hooks";
-import { setRowAlignment } from "@/store/slices/gridSlice";
+} from "@/shared/components/ui/select";
+import { Tooltip, TooltipTrigger } from "@/shared/components/ui/tooltip";
+import { useAppDispatch } from "@/shared/store/hooks";
+import { setRowAlignment } from "@/shared/store/slices/gridSlice";
 
 interface TemplateSelectorProps {
   rowId: string;

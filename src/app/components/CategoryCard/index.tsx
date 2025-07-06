@@ -5,11 +5,11 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import { useState } from "react";
-import { useDragAndDrop } from "@/hooks/useDragAndDrop";
-import { useAppDispatch } from "@/store/hooks";
-import { removeRow } from "@/store/slices/gridSlice";
-import type { Row } from "@/types/grid";
-import Header from "./Header";
+import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
+import { useAppDispatch } from "@/shared/store/hooks";
+import { removeRow } from "@/shared/store/slices/gridSlice";
+import type { Row } from "@/shared/types/grid";
+import CategoryHeader from "./CategoryHeader";
 import ProductSlots from "./ProductSlots";
 
 interface Props {
@@ -113,7 +113,7 @@ export default function CategoryCard({ row }: Props) {
       }}
       className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
     >
-      <Header
+      <CategoryHeader
         rowId={row.id}
         alignment={row.alignment}
         showTemplateSelector={showTemplateSelector}

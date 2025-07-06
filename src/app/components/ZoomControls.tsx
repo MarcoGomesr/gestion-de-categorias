@@ -1,8 +1,8 @@
 import { Minus, Plus } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "@/components/ui/button";
-import type { RootState } from "@/store";
-import { resetZoom, zoomIn, zoomOut } from "@/store/slices/gridSlice";
+import { Button } from "@/shared/components/ui/button";
+import type { RootState } from "@/shared/store";
+import { resetZoom, zoomIn, zoomOut } from "@/shared/store/slices/gridSlice";
 
 const ZoomControls: React.FC = () => {
   const zoom = useSelector((state: RootState) => state.grid.zoom);

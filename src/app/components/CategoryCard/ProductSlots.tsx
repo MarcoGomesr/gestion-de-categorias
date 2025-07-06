@@ -1,8 +1,8 @@
 "use client";
 import type React from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { removeProductFromRow } from "@/store/slices/gridSlice";
-import type { Row } from "@/types/grid";
+import { useAppDispatch } from "@/shared/store/hooks";
+import { removeProductFromRow } from "@/shared/store/slices/gridSlice";
+import type { Row } from "@/shared/types/grid";
 import ProductCard from "../ProductCard";
 import EmptySlot from "./EmptySlot";
 
