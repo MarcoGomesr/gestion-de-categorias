@@ -82,20 +82,6 @@ export default function CategoryCard({ row }: Props) {
   });
   const emptyDroppables = [emptyDroppable0, emptyDroppable1, emptyDroppable2];
 
-  function getRowAlignmentClass(row: Row) {
-    if (row.products.length === 1 || row.products.length === 2) {
-      switch (row.alignment) {
-        case "center":
-          return "justify-center";
-        case "right":
-          return "justify-end";
-        default:
-          return "justify-start";
-      }
-    }
-    return "justify-start";
-  }
-
   // Only highlight if dragging a category (row)
   const isDraggingCategory =
     active && active.data?.current && !active.data.current.product;
@@ -128,7 +114,9 @@ export default function CategoryCard({ row }: Props) {
         strategy={horizontalListSortingStrategy}
       >
         <div
-          className={`flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 ${getRowAlignmentClass(row)}`}
+          className={
+            "flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center"
+          }
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
           <ProductSlots
