@@ -13,7 +13,7 @@ const ZoomControls: React.FC = () => {
   const handleZoomOut = () => dispatch(zoomOut());
   const handleZoomReset = () => dispatch(resetZoom());
 
-  // No mostrar controles si no hay filas
+  // show only if there are categories
   if (rows.length === 0) return null;
 
   return (
