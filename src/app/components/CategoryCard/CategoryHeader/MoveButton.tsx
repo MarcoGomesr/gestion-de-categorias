@@ -1,13 +1,13 @@
 import { Move } from "lucide-react";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 
-interface MoveButtonProps {
+type MoveButtonProps = {
   id: string;
-  context: "CategoryRow" | "CategoryCard" | "ProductList";
+  context?: "CategoryRow"; // optional, defaults to 'CategoryRow' if not provided
   data?: any;
-}
+};
 
-function MoveButton({ id, context, data }: MoveButtonProps) {
+function MoveButton({ id, context = "CategoryRow", data }: MoveButtonProps) {
   const dragProps = useDragAndDrop({ id, context, data });
 
   return (
