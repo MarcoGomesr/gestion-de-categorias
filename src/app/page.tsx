@@ -81,7 +81,8 @@ export default function Home() {
     const product = active.data.current.product;
     const toRowId = over.data?.current?.rowId;
     const overId = over.id;
-    // Detectar si el drop fue sobre un slot vacío
+
+    // Detect if the drop was on an empty slot
     const isOverEmptySlot =
       typeof overId === "string" && overId.startsWith("empty-");
     let emptySlotIndex = -1;
