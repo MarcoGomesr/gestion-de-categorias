@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { Tooltip, TooltipTrigger } from "@/shared/components/ui/tooltip";
-import { useAppDispatch } from "@/shared/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import { setRowAlignment } from "@/shared/store/slices/gridSlice";
 
 type TemplateSelectorProps = {
@@ -24,6 +24,13 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
+
+  // Get the row from the store using rowId
+  const row = useAppSelector((state) =>
+    state.grid.rows.find((r) => r.id === rowId),
+  );
+  // Check if the category has products
+  const hasProducts = row.products.length > 0;
 
   if (show) {
     return (
@@ -69,6 +76,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         <Button
           variant="outline"
           size="sm"
+          disabled={!hasProducts}
           onClick={(e) => {
             e.stopPropagation();
             if (!alignment) {

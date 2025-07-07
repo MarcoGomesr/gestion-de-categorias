@@ -1,13 +1,7 @@
 "use client";
 import { useDndContext, useDroppable } from "@dnd-kit/core";
-import {
-  horizontalListSortingStrategy,
-  SortableContext,
-} from "@dnd-kit/sortable";
-import { useState } from "react";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 import { useAppDispatch } from "@/shared/store/hooks";
-import { removeRow } from "@/shared/store/slices/gridSlice";
 import type { Row } from "@/shared/types/grid";
 import CategoryCard from "./CategoryCard";
 
