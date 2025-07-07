@@ -20,9 +20,10 @@ A beautiful, modern category and product management interface for Inditex, featu
 
 ## Tech Stack
 
-- **Framework:** Next.js 14
+- **Framework:** Next.js 15
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
+- **React:** 19
 - **Database:** (Demo/Fake Data)
 - **UI Components:** Shadcn UI
 - **Icons:** Lucide React
