@@ -1,20 +1,62 @@
-## Requisitos
+# Inditex Category Management
 
-- [x] En todo momento, se debe ver la fotografía, el nombre y el precio de cada uno de los productos.
+## Requirements
 
-- [x] Se pueden añadir nuevos productos o eliminar los ya existentes.
- 
-- [x] Se pueden crear tantas filas como se quiera
-- [x] Las filas deben tener entre 1 y 3 elementos.
-- [x ] Se debe poder añadir elementos a las filas e intercambiarlos entre las diferentes filas creadas o entre los elementos de una misma fila usando Drag and Drop.
-- [x] Se pueden mover las filas de posición
-- [x] Se puede hacer zoom-out y zoom-in sobre el editor de la parrilla. Si se añaden muchas filas, se pierde el contexto de cómo quedaría la categoría. El zoom facilita poder ver el
-máximo de filas posibles. Este zoom debe hacerse solamente sobre la zona del editor y no sobre la página entera, por lo que no se puede hacer uso del zoom nativo del navegador.
+- [x] At all times, the photo, name, and price of each product must be visible.
+- [x] You can add new products or remove existing ones.
+- [x] You can create as many rows (categories) as you want.
+- [x] Rows must have between 1 and 3 elements.
+- [x] You must be able to add elements to rows and swap them between different rows or within the same row using Drag and Drop.
+- [x] Rows can be reordered.
+- [x] You can zoom in and out on the grid editor. If many rows are added, you may lose context of the category layout. The zoom helps you see as many rows as possible. This zoom should only affect the editor area, not the entire page, so you cannot use the browser's native zoom.
+- [x] You can associate and disassociate a template to a row.
+- [x] There are three templates available: left alignment, center alignment, and right alignment.
+- [x] You can see the name of the template assigned to each row.
+- [x] In addition to seeing the template name, you can preview the alignment effect in the editor. For example, if you select the right alignment template, products in that row will be right-aligned in the editor.
 
-- [x] Se puede asociar y desasociar una plantilla a una fila.
-- [x] Hay tres plantillas disponibles: la plantilla de alineación a la izquierda, la plantilla de
-alineación al centro y la parrilla de alineación a la derecha.
-- [x] Se puede ver el nombre de la plantilla que tiene cada fila.
+## Setup
 
-- [x] A parte de ver el nombre de la plantilla, se puede ver como quedaría la alineación según la plantilla que se ha seleccionado. Es decir, si se selecciona la plantilla de
-alineación a la derecha, los productos se deben alinear a la derecha en el editor.
+1. **Install dependencies:**
+   ```sh
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   ```
+
+2. **Run the development server:**
+   ```sh
+   pnpm dev
+   # or
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+3. **Open your browser:**
+   Visit [http://localhost:3000](http://localhost:3000) to use the app.
+
+## Usage
+
+- **Add a category:** Click the "Añadir categoria" button to create a new row (category).
+- **Add a product:**
+  - Use the "Añadir" button in the product list to add a product to the first category (row).
+  - Each category can have a maximum of 3 products. When the limit is reached, the "Añadir" button is disabled for that product.
+- **Remove a product:** Use the remove button on each product card within a category.
+- **Reorder products:** Drag and drop products within a row or between rows.
+- **Reorder categories:** Drag and drop entire rows to change their order.
+- **Zoom:** Use the zoom controls to zoom in/out on the grid editor area.
+- **Templates:**
+  - Assign a template (left, center, right alignment) to a row using the template selector.
+  - The alignment is visually reflected in the editor.
+  - You can remove the template from a row at any time.
+
+## Notes
+
+- When adding products using the "Añadir" button, products are always added to the first category (row). If the first category is full (3 products), the button is disabled until a slot is available.
+- All product data is demo/fake data and images are stored in the `public/images` directory.
+
+---
+
+Feel free to customize or extend the app as needed!
