@@ -1,6 +1,12 @@
 "use client";
 
-import { DndContext, DragOverlay, pointerWithin } from "@dnd-kit/core";
+import {
+  DndContext,
+  type DragEndEvent,
+  DragOverlay,
+  type DragStartEvent,
+  pointerWithin,
+} from "@dnd-kit/core";
 import { useState } from "react";
 import ProductCard from "@/shared/components/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
@@ -22,7 +28,7 @@ export default function Home() {
   const [activeProduct, setActiveProduct] = useState<Product | null>(null);
   const zoom = useAppSelector((state) => state.grid.zoom);
 
-  const handleDragStart = (event: any) => {
+  const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
     const row = rows.find((r) => r.id === active.id);
     if (row) {
@@ -30,14 +36,14 @@ export default function Home() {
       setActiveProduct(null);
       return;
     }
-    // Si el drag es de producto
+    // If dragging a product
     if (active?.data?.current?.product) {
       setActiveProduct(active.data.current.product);
       setActiveRow(null);
     }
   };
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     setActiveRow(null);
     setActiveProduct(null);
     const { active, over } = event;
