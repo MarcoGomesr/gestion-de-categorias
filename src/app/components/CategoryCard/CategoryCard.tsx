@@ -1,0 +1,71 @@
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import type { Row } from "@/shared/types/grid";
+import CategoryHeader from "./CategoryHeader";
+import ProductSlots from "./ProductSlots";
+
+interface CategoryCardProps {
+  row: Row;
+  setCombinedRef: (node: HTMLElement | null) => void;
+  dragProps: any;
+  showRing: boolean;
+  productIds: string[];
+  slotIndexes: (number | null)[];
+  emptyDroppables: any[];
+  showTemplateSelector: boolean;
+  setShowTemplateSelector: (show: boolean) => void;
+}
+
+function CategoryCard({
+  row,
+  setCombinedRef,
+  dragProps,
+  showRing,
+  productIds,
+  slotIndexes,
+  emptyDroppables,
+  showTemplateSelector,
+  setShowTemplateSelector,
+}: CategoryCardProps) {
+  return (
+    <div
+      ref={setCombinedRef}
+      style={{
+        transition: dragProps.transition,
+        transform: dragProps.transform
+          ? `translate3d(${dragProps.transform.x}px, ${dragProps.transform.y}px, 0)`
+          : undefined,
+        opacity: dragProps.isDragging ? 0.5 : 1,
+      }}
+      className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
+    >
+      <CategoryHeader
+        rowId={row.id}
+        alignment={row.alignment}
+        showTemplateSelector={showTemplateSelector}
+        setShowTemplateSelector={setShowTemplateSelector}
+      />
+      <SortableContext
+        items={productIds}
+        strategy={horizontalListSortingStrategy}
+      >
+        <div
+          className={
+            "flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center"
+          }
+          style={{ transition: "background 0.2s, border 0.2s" }}
+        >
+          <ProductSlots
+            row={row}
+            slotIndexes={slotIndexes}
+            emptyDroppables={emptyDroppables}
+          />
+        </div>
+      </SortableContext>
+    </div>
+  );
+}
+
+export default CategoryCard;
