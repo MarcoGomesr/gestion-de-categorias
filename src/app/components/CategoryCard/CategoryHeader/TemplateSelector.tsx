@@ -70,7 +70,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setShow(false);
-            dispatch(setRowAlignment({ rowId, alignment: "" as string }));
+            dispatch(setRowAlignment({ rowId, alignment: "left" }));
           }}
         >
           Eliminar plantilla
