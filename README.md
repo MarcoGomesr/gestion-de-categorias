@@ -24,6 +24,8 @@ A beautiful, modern category and product management interface for Inditex, featu
 - **Database:** (Demo/Fake Data)
 - **UI Components:** Shadcn UI
 - **Icons:** Lucide React
+- **Code Formatter/Linter:** Biome
+
 
 ## Requirements
 
