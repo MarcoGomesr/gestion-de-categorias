@@ -43,6 +43,7 @@ export type CategoryCardProps = {
   row: Row;
   setCombinedRef: (node: HTMLElement | null) => void;
   dragProps: DragPropsProductList | DragPropsCategory | DragPropsFallback;
+  showRing: boolean;
   productIds: string[];
   slotIndexes: (number | null)[];
   emptyDroppables: {
