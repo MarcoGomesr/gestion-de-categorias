@@ -24,7 +24,8 @@ A beautiful, modern category and product management interface for Inditex, featu
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **React:** 19
-- **Database:** (Demo/Fake Data)
+- **State Management:** Redux Toolkit
+- **Data:** (Fake Data)
 - **UI Components:** Shadcn UI
 - **Icons:** Lucide React
 - **Code Formatter/Linter:** Biome
@@ -84,7 +85,7 @@ A beautiful, modern category and product management interface for Inditex, featu
 
 ## Notes
 
-- When adding products using the "Añadir" button, products are always added to the first category (row). If the first category is full (3 products), the button is disabled until a slot is available.
-- All product data is demo/fake data and images are stored in the `public/images` directory.
+- When adding products using the "Añadir" button, products are always added to the first category (row). If the first category is full (3 products), the button are disabled until a slot is available.
+- All product data is in `shared/data/FakeProducts.s` and images are stored in the `public/images` directory.
 
 ---
