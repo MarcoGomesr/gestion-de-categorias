@@ -33,7 +33,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
     state.grid.rows.find((r) => r.id === rowId),
   );
   // Check if the category has products
-  const hasProducts = row.products.length > 0;
+  const hasProducts = (row?.products ?? []).length > 0;
 
   useEffect(() => {
     if (!hasProducts && show) {
