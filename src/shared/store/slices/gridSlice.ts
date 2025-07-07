@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-import type { Alignment, Product, Row } from "@/types/grid";
+import type { Alignment, Product, Row } from "@/shared/types/grid";
 
 export interface GridState {
   rows: Row[];
