@@ -11,7 +11,6 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
   row,
   setCombinedRef,
   dragProps,
-  showRing,
   productIds,
   slotIndexes,
   emptyDroppables,
@@ -26,7 +25,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
           : undefined,
         opacity: dragProps.isDragging ? 0.5 : 1,
       }}
-      className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
+      className="border rounded-xl p-4 shadow-sm bg-white"
     >
       <CategoryHeader rowId={row.id} alignment={row.alignment} />
       <SortableContext
@@ -34,9 +33,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
         strategy={horizontalListSortingStrategy}
       >
         <div
-          className={
-            "flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center"
-          }
+          className="flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center"
           style={{ transition: "background 0.2s, border 0.2s" }}
         >
           <ProductSlots

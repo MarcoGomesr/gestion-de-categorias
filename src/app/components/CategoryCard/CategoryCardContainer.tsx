@@ -74,17 +74,11 @@ const CategoryCardContainer: React.FC<Props> = ({ row }) => {
   });
   const emptyDroppables = [emptyDroppable0, emptyDroppable1, emptyDroppable2];
 
-  // Only highlight if dragging a category (row)
-  const isDraggingCategory =
-    active?.data?.current && !active.data.current.product;
-  const showRing = isOver && isDraggingCategory;
-
   return (
     <CategoryCard
       row={row}
       setCombinedRef={setCombinedRef}
       dragProps={dragProps}
-      showRing={!!showRing}
       productIds={productIds}
       slotIndexes={slotIndexes}
       emptyDroppables={emptyDroppables}
