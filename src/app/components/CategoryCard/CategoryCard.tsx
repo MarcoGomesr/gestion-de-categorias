@@ -35,9 +35,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       >
         <div
           className={
-            "flex gap-4 w-full p-4 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center"
+            "flex gap-3 w-full p-2 border-2 border-dashed border-gray-400 rounded-xl min-h-[320px] bg-gray-50 justify-center transition-colors transition-background duration-200"
           }
-          style={{ transition: "background 0.2s, border 0.2s" }}
         >
           <ProductSlots
             row={row}
