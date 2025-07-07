@@ -9,11 +9,22 @@ import ProductSlots from "./ProductSlots";
 interface CategoryCardProps {
   row: Row;
   setCombinedRef: (node: HTMLElement | null) => void;
-  dragProps: any;
+  dragProps: {
+    setNodeRef: (node: HTMLElement | null) => void;
+    attributes: Record<string, any>;
+    listeners: Record<string, any>;
+    transform?: { x: number; y: number };
+    transition?: string;
+    isDragging: boolean;
+    dragHandleProps: Record<string, any>;
+  };
   showRing: boolean;
   productIds: string[];
   slotIndexes: (number | null)[];
-  emptyDroppables: any[];
+  emptyDroppables: {
+    setNodeRef: (node: HTMLElement | null) => void;
+    isOver: boolean;
+  }[];
 }
 
 function CategoryCard({
