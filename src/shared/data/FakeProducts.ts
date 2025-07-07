@@ -1,4 +1,4 @@
-import type { Product } from "@/types/grid";
+import type { Product } from "@/shared/types/grid";
 
 export const fakeProducts: Product[] = [
   {
