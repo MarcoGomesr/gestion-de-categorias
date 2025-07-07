@@ -1,5 +1,4 @@
 import { useDndContext } from "@dnd-kit/core";
-import type React from "react";
 
 type EmptySlotProps = {
   setNodeRef: (node: HTMLElement | null) => void;

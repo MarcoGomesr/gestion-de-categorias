@@ -1,5 +1,4 @@
 "use client";
-import type React from "react";
 import ProductCard from "@/shared/components/ProductCard";
 import type { Row } from "@/shared/types/grid";
 import EmptySlot from "./EmptySlot";

@@ -1,4 +1,3 @@
-import type React from "react";
 import MoveButton from "./MoveButton";
 import RemoveButton from "./RemoveButton";
 import TemplateSelector from "./TemplateSelector";
