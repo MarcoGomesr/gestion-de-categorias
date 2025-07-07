@@ -14,8 +14,6 @@ interface CategoryCardProps {
   productIds: string[];
   slotIndexes: (number | null)[];
   emptyDroppables: any[];
-  showTemplateSelector: boolean;
-  setShowTemplateSelector: (show: boolean) => void;
 }
 
 function CategoryCard({
@@ -26,8 +24,6 @@ function CategoryCard({
   productIds,
   slotIndexes,
   emptyDroppables,
-  showTemplateSelector,
-  setShowTemplateSelector,
 }: CategoryCardProps) {
   return (
     <div
@@ -41,12 +37,7 @@ function CategoryCard({
       }}
       className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
     >
-      <CategoryHeader
-        rowId={row.id}
-        alignment={row.alignment}
-        showTemplateSelector={showTemplateSelector}
-        setShowTemplateSelector={setShowTemplateSelector}
-      />
+      <CategoryHeader rowId={row.id} alignment={row.alignment} />
       <SortableContext
         items={productIds}
         strategy={horizontalListSortingStrategy}

@@ -95,8 +95,6 @@ export default function CategoryCardContainer({ row }: Props) {
       productIds={productIds}
       slotIndexes={slotIndexes}
       emptyDroppables={emptyDroppables}
-      showTemplateSelector={showTemplateSelector}
-      setShowTemplateSelector={setShowTemplateSelector}
     />
   );
 }

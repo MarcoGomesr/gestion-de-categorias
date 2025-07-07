@@ -1,5 +1,6 @@
 "use client";
 import type React from "react";
+import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
@@ -15,17 +16,14 @@ import { setRowAlignment } from "@/shared/store/slices/gridSlice";
 interface TemplateSelectorProps {
   rowId: string;
   alignment: string;
-  show: boolean;
-  setShow: (show: boolean) => void;
 }
 
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   rowId,
   alignment,
-  show,
-  setShow,
 }) => {
   const dispatch = useAppDispatch();
+  const [show, setShow] = useState(false);
 
   if (show) {
     return (
@@ -68,21 +66,19 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!alignment) {
-                dispatch(setRowAlignment({ rowId, alignment: "left" }));
-              }
-              setShow(true);
-            }}
-          >
-            Añadir plantilla
-          </Button>
-        </span>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!alignment) {
+              dispatch(setRowAlignment({ rowId, alignment: "left" }));
+            }
+            setShow(true);
+          }}
+        >
+          Añadir plantilla
+        </Button>
       </TooltipTrigger>
     </Tooltip>
   );
