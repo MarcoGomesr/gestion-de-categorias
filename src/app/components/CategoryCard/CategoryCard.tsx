@@ -6,7 +6,7 @@ import type { Row } from "@/shared/types/grid";
 import CategoryHeader from "./CategoryHeader";
 import ProductSlots from "./ProductSlots";
 
-interface CategoryCardProps {
+type CategoryCardProps = {
   row: Row;
   setCombinedRef: (node: HTMLElement | null) => void;
   dragProps: {
@@ -25,7 +25,7 @@ interface CategoryCardProps {
     setNodeRef: (node: HTMLElement | null) => void;
     isOver: boolean;
   }[];
-}
+};
 
 function CategoryCard({
   row,
