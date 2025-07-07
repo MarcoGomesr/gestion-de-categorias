@@ -48,7 +48,7 @@ function ProductCard({
       {...(isClient ? dragProps.attributes : {})}
       style={style}
       className={cn(
-        "relative group hover:shadow-md transition-all bg-white",
+        "relative group hover:shadow-md transition-all bg-white rounded",
         isProductList ? "" : "w-[250px]",
         dragProps.isDragging ? "opacity-0" : "",
       )}
