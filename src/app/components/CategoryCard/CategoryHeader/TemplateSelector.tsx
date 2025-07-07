@@ -13,10 +13,10 @@ import { Tooltip, TooltipTrigger } from "@/shared/components/ui/tooltip";
 import { useAppDispatch } from "@/shared/store/hooks";
 import { setRowAlignment } from "@/shared/store/slices/gridSlice";
 
-interface TemplateSelectorProps {
+type TemplateSelectorProps = {
   rowId: string;
   alignment: string;
-}
+};
 
 const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   rowId,

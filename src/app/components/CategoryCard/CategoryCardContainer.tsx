@@ -11,9 +11,9 @@ import { removeRow } from "@/shared/store/slices/gridSlice";
 import type { Row } from "@/shared/types/grid";
 import CategoryCard from "./CategoryCard";
 
-interface Props {
+type Props = {
   row: Row;
-}
+};
 
 function getSlotIndexes(alignment: string, numProducts: number) {
   const align = alignment || "left";
@@ -54,8 +54,6 @@ export default function CategoryCardContainer({ row }: Props) {
     context: "CategoryRow",
     data: { rowId: row.id },
   });
-
-  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
 
   const setCombinedRef = (node: HTMLElement | null) => {
     setDroppableRef(node);

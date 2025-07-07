@@ -1,11 +1,11 @@
 import { useDndContext } from "@dnd-kit/core";
 import type React from "react";
 
-interface EmptySlotProps {
+type EmptySlotProps = {
   setNodeRef: (node: HTMLElement | null) => void;
   emptyId: string;
   isOver: boolean;
-}
+};
 
 const EmptySlot: React.FC<EmptySlotProps> = ({
   setNodeRef,

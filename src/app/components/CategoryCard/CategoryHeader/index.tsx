@@ -3,10 +3,10 @@ import MoveButton from "./MoveButton";
 import RemoveButton from "./RemoveButton";
 import TemplateSelector from "./TemplateSelector";
 
-interface HeaderProps {
+type HeaderProps = {
   rowId: string;
   alignment: string;
-}
+};
 
 const CategoryHeader: React.FC<HeaderProps> = ({ rowId, alignment }) => (
   <div className="flex justify-between items-center mb-3">
