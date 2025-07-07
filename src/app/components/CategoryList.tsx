@@ -5,6 +5,7 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import { Plus } from "lucide-react";
+import type React from "react";
 import { useRef } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
@@ -35,7 +36,7 @@ const CategoryRows = ({ rows }: { rows: Row[] }) => (
   </>
 );
 
-export default function CategoryList() {
+const CategoryList: React.FC = () => {
   const rows = useAppSelector((state) => state.grid.rows);
   const zoom = useAppSelector((state) => state.grid.zoom);
   const dispatch = useAppDispatch();
@@ -71,4 +72,6 @@ export default function CategoryList() {
       </div>
     </div>
   );
-}
+};
+
+export default CategoryList;

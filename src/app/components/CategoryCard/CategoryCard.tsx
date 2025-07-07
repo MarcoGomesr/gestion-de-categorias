@@ -2,11 +2,12 @@ import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
+import type React from "react";
 import CategoryHeader from "./CategoryHeader";
 import ProductSlots from "./ProductSlots";
 import type { CategoryCardProps } from "./types";
 
-function CategoryCard({
+const CategoryCard: React.FC<CategoryCardProps> = ({
   row,
   setCombinedRef,
   dragProps,
@@ -14,7 +15,7 @@ function CategoryCard({
   productIds,
   slotIndexes,
   emptyDroppables,
-}: CategoryCardProps) {
+}) => {
   return (
     <div
       ref={setCombinedRef}
@@ -47,6 +48,6 @@ function CategoryCard({
       </SortableContext>
     </div>
   );
-}
+};
 
 export default CategoryCard;

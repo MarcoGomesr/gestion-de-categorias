@@ -1,11 +1,12 @@
 "use client";
 
+import type React from "react";
 import ProductCard from "@/shared/components/ProductCard";
 import { fakeProducts } from "@/shared/data/FakeProducts";
 import { useAppSelector } from "@/shared/store/hooks";
 import type { Product } from "@/shared/types/grid";
 
-export default function ProductList() {
+const ProductList: React.FC = () => {
   const rows = useAppSelector((state) => state.grid.rows);
   const categoryProductIds =
     rows[0]?.products.map((p: Product) => p.id).join("-") || "";
@@ -26,4 +27,6 @@ export default function ProductList() {
       </div>
     </div>
   );
-}
+};
+
+export default ProductList;

@@ -1,4 +1,5 @@
 import { Move } from "lucide-react";
+import type React from "react";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
 
 type MoveButtonProps = {
@@ -7,7 +8,11 @@ type MoveButtonProps = {
   data?: any;
 };
 
-function MoveButton({ id, context = "CategoryRow", data }: MoveButtonProps) {
+const MoveButton: React.FC<MoveButtonProps> = ({
+  id,
+  context = "CategoryRow",
+  data,
+}) => {
   const dragProps = useDragAndDrop({ id, context, data });
 
   return (
@@ -23,6 +28,6 @@ function MoveButton({ id, context = "CategoryRow", data }: MoveButtonProps) {
       <Move className="w-4 h-4" />
     </button>
   );
-}
+};
 
 export default MoveButton;
