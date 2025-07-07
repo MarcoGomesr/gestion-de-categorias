@@ -70,7 +70,6 @@ export default function Home() {
       return;
     }
 
-    // Lógica de productos
     if (!active?.data?.current || !over?.data?.current) return;
     const fromRowId = active.data.current.rowId;
     const product = active.data.current.product;
@@ -85,7 +84,7 @@ export default function Home() {
       const parts = overId.split("-");
       emptySlotIndex = parseInt(parts[2], 10);
     }
-    // Si es el mismo row, reordenar (incluyendo drop sobre slot vacío)
+    // If it's the same row, reorder products (including drop on empty slot)
     if (toRowId && fromRowId === toRowId) {
       const row = rows.find((r) => r.id === fromRowId);
       if (!row) return;
@@ -112,7 +111,32 @@ export default function Home() {
       }
       return;
     }
-    // Mover entre filas (incluyendo drop sobre slot vacío)
+
+    // If it's a new product from ProductList, add it to the category
+    if (fromRowId === "ProductList" && toRowId) {
+      const destinationRow = rows.find((r) => r.id === toRowId);
+      if (destinationRow && destinationRow.products.length < 3) {
+        let toIndex = destinationRow.products.length;
+        if (isOverEmptySlot && emptySlotIndex !== -1) {
+          toIndex = emptySlotIndex;
+        } else if (over.data?.current?.product) {
+          toIndex = destinationRow.products.findIndex(
+            (p: Product) => (p.slotId || p.id) === over.id,
+          );
+          if (toIndex === -1) toIndex = destinationRow.products.length;
+        }
+        dispatch(
+          addProductToRow({
+            rowId: toRowId,
+            product,
+            source: "dnd",
+          }),
+        );
+      }
+      return;
+    }
+
+    // Move between rows (including drop on empty slot)
     if (
       toRowId &&
       fromRowId !== toRowId &&
@@ -141,29 +165,6 @@ export default function Home() {
           }),
         );
       }
-    }
-    // Si es un producto nuevo desde ProductList, agregarlo a la categoría
-    if (fromRowId === "ProductList" && toRowId) {
-      const destinationRow = rows.find((r) => r.id === toRowId);
-      if (destinationRow && destinationRow.products.length < 3) {
-        let toIndex = destinationRow.products.length;
-        if (isOverEmptySlot && emptySlotIndex !== -1) {
-          toIndex = emptySlotIndex;
-        } else if (over.data?.current?.product) {
-          toIndex = destinationRow.products.findIndex(
-            (p: Product) => (p.slotId || p.id) === over.id,
-          );
-          if (toIndex === -1) toIndex = destinationRow.products.length;
-        }
-        dispatch(
-          addProductToRow({
-            rowId: toRowId,
-            product,
-            source: "dnd",
-          }),
-        );
-      }
-      return;
     }
   };
 
