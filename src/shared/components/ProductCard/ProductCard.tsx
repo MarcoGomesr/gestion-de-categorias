@@ -7,6 +7,7 @@ import ProductCardDragHandle from "./ProductCardDragHandle";
 import ProductCardImage from "./ProductCardImage";
 import ProductCardInfo from "./ProductCardInfo";
 import ProductCardRemoveButton from "./ProductCardRemoveButton";
+import useIsClient from "./useIsClient";
 
 type ProductCardProps = {
   product: Product;
@@ -17,6 +18,12 @@ type ProductCardProps = {
   dragProps: any;
 };
 
+/**
+ * We use isClient to avoid hydration mismatches caused by dynamic attributes
+ * (e.g., from drag & drop libraries like DnD Kit) that are only stable on the client.
+ * Even though this is a Client Component ("use client"), the first render may still
+ * differ between SSR and client if these attributes are included.
+ */
 function ProductCard({
   product,
   onAdd,
@@ -25,6 +32,7 @@ function ProductCard({
   isProductList = false,
   dragProps,
 }: ProductCardProps) {
+  const isClient = useIsClient();
   const style = dragProps.transform
     ? {
         transform: dragProps.transform
@@ -37,7 +45,7 @@ function ProductCard({
   return (
     <div
       ref={dragProps.setNodeRef}
-      {...dragProps.attributes}
+      {...(isClient ? dragProps.attributes : {})}
       style={style}
       className={cn(
         "relative group hover:shadow-md transition-all bg-white",
