@@ -1,5 +1,29 @@
 # Inditex Category Management
 
+<img src="public/github-preview.png" alt="App preview" width="100%" style="border-radius: 8px; margin-bottom: 16px;" />
+
+A beautiful, modern category and product management interface for Inditex, featuring drag-and-drop, template assignment, and responsive design. Built for speed and usability.
+
+## Features
+
+- 🛒 Category & Product Management
+- 🖱️ Drag and Drop for Products & Categories
+- ➕ Add/Remove Products and Categories
+- 🗂️ Assign Templates (Left, Center, Right Alignment)
+- 🔍 Zoom Controls for Editor Area
+- 🖼️ Product Images & Details Always Visible
+- 📦 Demo Data with Realistic Images
+- ⚡ Fast, Modern UI with Tailwind CSS
+
+## Tech Stack
+
+- **Framework:** Next.js 14
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Database:** (Demo/Fake Data)
+- **UI Components:** Shadcn UI
+- **Icons:** Lucide React
+
 ## Requirements
 
 - [x] At all times, the photo, name, and price of each product must be visible.
@@ -58,5 +82,3 @@
 - All product data is demo/fake data and images are stored in the `public/images` directory.
 
 ---
-
-Feel free to customize or extend the app as needed!
