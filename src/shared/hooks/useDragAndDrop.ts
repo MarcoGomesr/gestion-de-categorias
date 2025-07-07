@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
-import type { Product } from "@/types/grid";
+import type { Product } from "@/shared/types/grid";
 
 type DragContext = "ProductList" | "CategoryCard" | "CategoryRow";
 
@@ -14,6 +14,7 @@ type UseDragAndDropProps = {
   };
 };
 
+export type { UseDragAndDropProps };
 export function useDragAndDrop({ id, context, data }: UseDragAndDropProps) {
   const draggable = useDraggable({
     id: `palette-${id}`,
