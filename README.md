@@ -1,8 +1,9 @@
 # Inditex Category Management
+A beautiful, modern category and product management interface for Inditex, featuring drag-and-drop, template assignment, and responsive design. Built for speed and usability.
 
 <img src="public/github-preview.png" alt="App preview" width="100%" style="border-radius: 8px; margin-bottom: 16px;" />
 
-A beautiful, modern category and product management interface for Inditex, featuring drag-and-drop, template assignment, and responsive design. Built for speed and usability.
+
 
 ## Features
 
