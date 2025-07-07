@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import {
   Select,
@@ -34,6 +34,12 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   );
   // Check if the category has products
   const hasProducts = row.products.length > 0;
+
+  useEffect(() => {
+    if (!hasProducts && show) {
+      setShow(false);
+    }
+  }, [hasProducts, show]);
 
   if (show) {
     return (
