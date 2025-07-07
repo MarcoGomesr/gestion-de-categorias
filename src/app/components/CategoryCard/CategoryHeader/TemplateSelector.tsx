@@ -9,7 +9,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { Tooltip, TooltipTrigger } from "@/shared/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import { setRowAlignment } from "@/shared/store/slices/gridSlice";
 
@@ -73,21 +77,30 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!hasProducts}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!alignment) {
-              dispatch(setRowAlignment({ rowId, alignment: "left" }));
-            }
-            setShow(true);
-          }}
-        >
-          Añadir plantilla
-        </Button>
+        <span tabIndex={hasProducts ? -1 : 0}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!hasProducts}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!alignment) {
+                dispatch(setRowAlignment({ rowId, alignment: "left" }));
+              }
+              setShow(true);
+            }}
+          >
+            Añadir plantilla
+          </Button>
+        </span>
       </TooltipTrigger>
+      {!hasProducts && (
+        <TooltipContent className="text-center">
+          Debes Agregar un producto
+          <br />
+          para habilitar la plantilla
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 };
