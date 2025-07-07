@@ -1,6 +1,6 @@
 import type React from "react";
-import { Button } from "@/shared/components/ui/button";
 import MoveButton from "./MoveButton";
+import RemoveButton from "./RemoveButton";
 import TemplateSelector from "./TemplateSelector";
 
 interface HeaderProps {
@@ -8,7 +8,6 @@ interface HeaderProps {
   alignment: string;
   showTemplateSelector: boolean;
   setShowTemplateSelector: (show: boolean) => void;
-  onRemove: (e: React.MouseEvent) => void;
 }
 
 const CategoryHeader: React.FC<HeaderProps> = ({
@@ -16,7 +15,6 @@ const CategoryHeader: React.FC<HeaderProps> = ({
   alignment,
   showTemplateSelector,
   setShowTemplateSelector,
-  onRemove,
 }) => (
   <div className="flex justify-between items-center mb-3">
     <div className="flex items-center gap-2">
@@ -28,9 +26,7 @@ const CategoryHeader: React.FC<HeaderProps> = ({
         setShow={setShowTemplateSelector}
       />
     </div>
-    <Button variant="destructive" onClick={onRemove}>
-      Eliminar fila
-    </Button>
+    <RemoveButton rowId={rowId} />
   </div>
 );
 
