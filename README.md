@@ -6,7 +6,7 @@
  
 - [x] Se pueden crear tantas filas como se quiera
 - [x] Las filas deben tener entre 1 y 3 elementos.
-- [x ] Se debe poder añadir elementos a las filas e intercambiarlos entre las diferentes filas creadas o entre los elementos de una misma fila usando Drag and Drop.
+- [x] Se debe poder añadir elementos a las filas e intercambiarlos entre las diferentes filas creadas o entre los elementos de una misma fila usando Drag and Drop.
 - [x] Se pueden mover las filas de posición
 - [x] Se puede hacer zoom-out y zoom-in sobre el editor de la parrilla. Si se añaden muchas filas, se pierde el contexto de cómo quedaría la categoría. El zoom facilita poder ver el
 máximo de filas posibles. Este zoom debe hacerse solamente sobre la zona del editor y no sobre la página entera, por lo que no se puede hacer uso del zoom nativo del navegador.
