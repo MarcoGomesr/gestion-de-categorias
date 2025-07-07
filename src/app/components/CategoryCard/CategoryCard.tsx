@@ -2,30 +2,9 @@ import {
   horizontalListSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
-import type { Row } from "@/shared/types/grid";
 import CategoryHeader from "./CategoryHeader";
 import ProductSlots from "./ProductSlots";
-
-type CategoryCardProps = {
-  row: Row;
-  setCombinedRef: (node: HTMLElement | null) => void;
-  dragProps: {
-    setNodeRef: (node: HTMLElement | null) => void;
-    attributes: Record<string, any>;
-    listeners: Record<string, any>;
-    transform?: { x: number; y: number };
-    transition?: string;
-    isDragging: boolean;
-    dragHandleProps: Record<string, any>;
-  };
-  showRing: boolean;
-  productIds: string[];
-  slotIndexes: (number | null)[];
-  emptyDroppables: {
-    setNodeRef: (node: HTMLElement | null) => void;
-    isOver: boolean;
-  }[];
-};
+import type { CategoryCardProps } from "./types";
 
 function CategoryCard({
   row,
