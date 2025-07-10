@@ -2,7 +2,6 @@
 import { useDndContext, useDroppable } from "@dnd-kit/core";
 import type React from "react";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
-import { useAppDispatch } from "@/shared/store/hooks";
 import type { Row } from "@/shared/types/grid";
 import CategoryCard from "./CategoryCard";
 
@@ -37,7 +36,6 @@ function getSlotIndexes(alignment: string, numProducts: number) {
 }
 
 const CategoryCardContainer: React.FC<Props> = ({ row }) => {
-  const dispatch = useAppDispatch();
   const { setNodeRef: setDroppableRef, isOver } = useDroppable({
     id: row.id,
     data: { rowId: row.id },
