@@ -20,7 +20,7 @@ const EmptySlot: React.FC<EmptySlotProps> = ({
       ref={setNodeRef}
       key={emptyId}
       data-id={emptyId}
-      className={`w-[250px] h-[377px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50 transition ${showRing ? "ring-2 ring-blue-400" : ""}`}
+      className={`w-[250px] h-[429px] rounded bg-gray-100 border border-dashed border-gray-300 opacity-50 transition ${showRing ? "ring-2 ring-blue-400" : ""}`}
     />
   );
 };
