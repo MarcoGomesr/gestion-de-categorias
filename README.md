@@ -1,4 +1,4 @@
-# Inditex Category Management
+# Category Management
 A beautiful, modern category and product management interface for Inditex, featuring drag-and-drop, template assignment, and responsive design. Built for speed and usability.
 
 [Live Demo](https://gestion-de-categorias.vercel.app/)
