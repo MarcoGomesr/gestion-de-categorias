@@ -1,9 +1,9 @@
-import type { Row } from "@/shared/types/grid";
+import type { RowWithAlignment } from "@/shared/types/grid";
 import MoveButton from "./MoveButton";
 import RemoveButton from "./RemoveButton";
 import TemplateSelector from "./TemplateSelector";
 
-export default function CategoryHeader({ id, alignment }: Row) {
+export default function CategoryHeader({ id, alignment }: RowWithAlignment) {
   return (
     <div className="flex justify-between items-center mb-3">
       <div className="flex items-center gap-2">

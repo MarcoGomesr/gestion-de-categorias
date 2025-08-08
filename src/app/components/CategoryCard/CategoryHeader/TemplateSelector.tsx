@@ -15,9 +15,9 @@ import {
 } from "@/shared/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import { setRowAlignment } from "@/shared/store/slices/gridSlice";
-import type { Alignment, Row } from "@/shared/types/grid";
+import type { Alignment, RowWithAlignment } from "@/shared/types/grid";
 
-const TemplateSelector = ({ id, alignment }: Row) => {
+const TemplateSelector = ({ id, alignment }: RowWithAlignment) => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
 

@@ -52,6 +52,7 @@ function ProductCard({
         isProductList ? "" : "w-[250px]",
         dragProps.isDragging ? "opacity-0" : "",
       )}
+      data-testid="product-card"
     >
       <ProductCardDragHandle dragHandleProps={dragProps.dragHandleProps} />
       <div

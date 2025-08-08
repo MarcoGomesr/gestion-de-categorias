@@ -3,7 +3,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 import useEvent from "@testing-library/user-event";
 import { createRef } from "react";
 import { Provider } from "react-redux";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it  } from "vitest";
 import gridSlice from "@/shared/store/slices/gridSlice";
 import type { Alignment } from "@/shared/types/grid";
 import CategoryList from "./CategoryList";
