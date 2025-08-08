@@ -18,7 +18,7 @@ describe("ZoomControls", () => {
     render(
       <Provider store={store}>
         <ZoomControls />
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByLabelText("Zoom out")).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("ZoomControls", () => {
     const { container } = render(
       <Provider store={emptyStore}>
         <ZoomControls />
-      </Provider>
+      </Provider>,
     );
     expect(container).toBeEmptyDOMElement();
   });
