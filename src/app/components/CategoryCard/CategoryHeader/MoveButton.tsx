@@ -1,5 +1,4 @@
 import { Move } from "lucide-react";
-import type React from "react";
 import { Button } from "@/shared/components/ui/button";
 import type { UseDragAndDropProps } from "@/shared/hooks/useDragAndDrop";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";

@@ -15,22 +15,15 @@ import {
 } from "@/shared/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/shared/store/hooks";
 import { setRowAlignment } from "@/shared/store/slices/gridSlice";
+import type { Alignment, Row } from "@/shared/types/grid";
 
-type TemplateSelectorProps = {
-  rowId: string;
-  alignment: string;
-};
-
-const TemplateSelector: React.FC<TemplateSelectorProps> = ({
-  rowId,
-  alignment,
-}) => {
+const TemplateSelector = ({ id, alignment }: Row) => {
   const dispatch = useAppDispatch();
   const [show, setShow] = useState(false);
 
-  // Get the row from the store using rowId
+  // Get the row from the store using id
   const row = useAppSelector((state) =>
-    state.grid.rows.find((r) => r.id === rowId),
+    state.grid.rows.find((r) => r.id === id),
   );
   // Check if the category has products
   const hasProducts = (row?.products ?? []).length > 0;
@@ -50,7 +43,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             <Select
               value={alignment}
               onValueChange={(val) =>
-                dispatch(setRowAlignment({ rowId, alignment: val as any }))
+                dispatch(setRowAlignment({ id, alignment: val as Alignment }))
               }
             >
               <SelectTrigger className="w-[120px]">
@@ -70,7 +63,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
           onClick={(e) => {
             e.stopPropagation();
             setShow(false);
-            dispatch(setRowAlignment({ rowId, alignment: "left" }));
+            dispatch(setRowAlignment({ id, alignment: "left" }));
           }}
         >
           Eliminar plantilla
@@ -90,7 +83,7 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             onClick={(e) => {
               e.stopPropagation();
               if (!alignment) {
-                dispatch(setRowAlignment({ rowId, alignment: "left" }));
+                dispatch(setRowAlignment({ id, alignment: "left" }));
               }
               setShow(true);
             }}

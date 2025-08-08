@@ -1,8 +1,8 @@
+import type { Row } from "@/shared/types/grid";
 import CategoryHeader from "./CategoryHeader";
-import type { HeaderProps } from "./CategoryHeader.types";
 
-function CategoryHeaderContainer({ rowId, alignment }: HeaderProps) {
-  return <CategoryHeader rowId={rowId} alignment={alignment} />;
+function CategoryHeaderContainer({ id, alignment }: Row) {
+  return <CategoryHeader id={id} alignment={alignment} />;
 }
 
 export default CategoryHeaderContainer;

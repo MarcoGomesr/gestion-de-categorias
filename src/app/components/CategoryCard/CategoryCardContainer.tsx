@@ -2,14 +2,14 @@
 import { useDndContext, useDroppable } from "@dnd-kit/core";
 import type React from "react";
 import { useDragAndDrop } from "@/shared/hooks/useDragAndDrop";
-import type { Row } from "@/shared/types/grid";
+import type { Alignment, Row } from "@/shared/types/grid";
 import CategoryCard from "./CategoryCard";
 
 type Props = {
   row: Row;
 };
 
-function getSlotIndexes(alignment: string, numProducts: number) {
+function getSlotIndexes(alignment: Alignment, numProducts: number) {
   const align = alignment || "left";
   if (numProducts === 0) return [null, null, null];
   if (numProducts === 1) {
@@ -53,10 +53,18 @@ const CategoryCardContainer: React.FC<Props> = ({ row }) => {
     dragProps.setNodeRef?.(node);
   };
 
+  // Get all product slotIds, filtering out undefined values
   const productIds = row.products
-    .map((p) => p.slotId)
-    .filter((id): id is string => Boolean(id));
-  const slotIndexes = getSlotIndexes(row.alignment, row.products.length);
+    ? row.products
+        .map((p) => p.slotId)
+        .filter((id): id is string => Boolean(id))
+    : [];
+
+  // Ensure alignment and products are defined before calling getSlotIndexes
+  const slotIndexes =
+    row.alignment && row.products
+      ? getSlotIndexes(row.alignment, row.products.length)
+      : [null, null, null];
 
   const emptyDroppable0 = useDroppable({
     id: `empty-${row.id}-0`,

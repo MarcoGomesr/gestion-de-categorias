@@ -5,6 +5,7 @@ import { createRef } from "react";
 import { Provider } from "react-redux";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import gridSlice from "@/shared/store/slices/gridSlice";
+import type { Alignment } from "@/shared/types/grid";
 import CategoryList from "./CategoryList";
 import CategoryListContainer from "./CategoryListContainer";
 
@@ -150,15 +151,16 @@ describe("CategoryList", () => {
     render(
       <Provider store={store}>
         <CategoryList
-          rows={initialState.grid.rows}
+          rows={initialState.grid.rows.map((row) => ({
+            ...row,
+            alignment: row.alignment as Alignment,
+          }))}
           zoom={initialState.grid.zoom}
           onAddCategory={() => {}}
           gridRef={gridRef}
         />
       </Provider>,
     );
-
-    screen.debug();
 
     expect(screen.getByTestId("zoom-controls")).toBeInTheDocument();
   });

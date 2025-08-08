@@ -40,9 +40,9 @@ const gridSlice = createSlice({
     },
     setRowAlignment: (
       state,
-      action: PayloadAction<{ rowId: string; alignment: Alignment }>,
+      action: PayloadAction<{ id: string; alignment: Alignment }>,
     ) => {
-      const row = state.rows.find((r) => r.id === action.payload.rowId);
+      const row = state.rows.find((r) => r.id === action.payload.id);
       if (row) row.alignment = action.payload.alignment;
     },
     addProductToRow: (

@@ -28,7 +28,7 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
       }}
       className={`border rounded-xl p-4 shadow-sm bg-white ${showRing ? "ring-2 ring-blue-400" : ""}`}
     >
-      <CategoryHeader rowId={row.id} alignment={row.alignment} />
+      <CategoryHeader id={row.id} alignment={row.alignment} />
       <SortableContext
         items={productIds}
         strategy={horizontalListSortingStrategy}

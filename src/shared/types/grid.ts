@@ -10,6 +10,7 @@ export type Alignment = "left" | "center" | "right";
 
 export type Row = {
   id: string;
-  alignment: Alignment;
-  products: Product[];
+  alignment?: Alignment;
+  products?: Product[];
 };
+export type RowIdOnly = Pick<Row, "id">;

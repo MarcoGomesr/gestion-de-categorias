@@ -9,7 +9,7 @@ import type { Product } from "@/shared/types/grid";
 const ProductList: React.FC = () => {
   const rows = useAppSelector((state) => state.grid.rows);
   const categoryProductIds =
-    rows[0]?.products.map((p: Product) => p.id).join("-") || "";
+    rows[0]?.products?.map((p: Product) => p.id).join("-") || "";
 
   return (
     <div className="border rounded-xl p-4 shadow-sm bg-white max-w-md">
@@ -21,7 +21,7 @@ const ProductList: React.FC = () => {
             product={product}
             isProductList
             rowId={rows[0]?.id}
-            disabled={rows[0]?.products.length >= 3}
+            disabled={Boolean((rows[0]?.products ?? []).length >= 3)}
           />
         ))}
       </div>
