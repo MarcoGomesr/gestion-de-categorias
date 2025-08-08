@@ -10,11 +10,7 @@ type MoveButtonProps = {
   data?: UseDragAndDropProps["data"];
 };
 
-const MoveButton: React.FC<MoveButtonProps> = ({
-  id,
-  context = "CategoryRow",
-  data,
-}) => {
+const MoveButton = ({ id, context = "CategoryRow", data }: MoveButtonProps) => {
   const dragProps = useDragAndDrop({ id, context, data });
 
   return (

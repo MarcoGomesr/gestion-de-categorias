@@ -1,13 +1,8 @@
-import type React from "react";
 import { Button } from "@/shared/components/ui/button";
 import { useAppDispatch } from "@/shared/store/hooks";
 import { removeRow } from "@/shared/store/slices/gridSlice";
 
-type RemoveButtonProps = {
-  rowId: string;
-};
-
-const RemoveButton: React.FC<RemoveButtonProps> = ({ rowId }) => {
+const RemoveButton = ({ rowId }: { rowId: string }) => {
   const dispatch = useAppDispatch();
   return (
     <Button
