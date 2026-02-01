@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "format": "biome format . --write"
+    "format": "biome format . --write",
+    "test": "vitest"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

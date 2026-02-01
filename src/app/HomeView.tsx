@@ -4,7 +4,7 @@ import ProductCard from "@/shared/components/ProductCard";
 import type { Product, Row } from "@/shared/types/grid";
 import CategoryCard from "./components/CategoryCard";
 import CategoryList from "./components/CategoryList";
-import ProductList from "./components/ProductList";
+import ProductList from "./components/ProductList/";
 
 interface HomeViewProps {
   zoom: number;

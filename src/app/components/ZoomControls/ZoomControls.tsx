@@ -1,27 +1,33 @@
 import { Minus, Plus } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/shared/components/ui/button";
-import type { RootState } from "@/shared/store";
-import { resetZoom, zoomIn, zoomOut } from "@/shared/store/slices/gridSlice";
+import type { Row } from "@/shared/types/grid";
 
-const ZoomControls: React.FC = () => {
-  const zoom = useSelector((state: RootState) => state.grid.zoom);
-  const rows = useSelector((state: RootState) => state.grid.rows);
-  const dispatch = useDispatch();
+// Props for the presentational ZoomControls component
+type ZoomControlsProps = {
+  zoom: number;
+  rows: Row[]; // Replace 'any' with your actual Row type
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onZoomReset: () => void;
+};
 
-  const handleZoomIn = () => dispatch(zoomIn());
-  const handleZoomOut = () => dispatch(zoomOut());
-  const handleZoomReset = () => dispatch(resetZoom());
-
-  // show only if there are categories
+// Presentational component: receives all data and handlers as props
+function ZoomControls({
+  zoom,
+  rows,
+  onZoomIn,
+  onZoomOut,
+  onZoomReset,
+}: ZoomControlsProps) {
+  // Show only if there are categories
   if (rows.length === 0) return null;
 
   return (
-    <>
+    <div className="flex items-center gap-2" data-testid="zoom-controls">
       <Button
         variant="outline"
         size="icon"
-        onClick={handleZoomOut}
+        onClick={onZoomOut}
         aria-label="Zoom out"
       >
         <Minus className="w-4 h-4" />
@@ -32,7 +38,7 @@ const ZoomControls: React.FC = () => {
       <Button
         variant="outline"
         size="icon"
-        onClick={handleZoomIn}
+        onClick={onZoomIn}
         aria-label="Zoom in"
       >
         <Plus className="w-4 h-4" />
@@ -40,13 +46,13 @@ const ZoomControls: React.FC = () => {
       <Button
         variant="outline"
         size="sm"
-        onClick={handleZoomReset}
+        onClick={onZoomReset}
         aria-label="Reset zoom"
       >
         Reset
       </Button>
-    </>
+    </div>
   );
-};
+}
 
 export default ZoomControls;

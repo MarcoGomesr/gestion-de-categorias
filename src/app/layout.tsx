@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Gestion de categorías - INDITEX",
+  title: "Gestion de categorías",
   description: "Gestion de categorías",
 };
 
